@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Biography 101 — The Craft of Writing a Life</title>
+<meta name="description" content="Biography 101 is a short, practical course for writing honest, vivid biographies — from first interview to final draft." />
+<style>
+  :root {
+    --ink: #1a1613;
+    --paper: #f6f1e7;
+    --paper-2: #efe6d4;
+    --rule: #2a211b;
+    --accent: #b23a1f;
+    --muted: #6b5d52;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(178,58,31,.3); }
+  a:hover { border-bottom-color: var(--accent); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 28px; }
+
+  /* Masthead */
+  .masthead {
+    border-bottom: 2px solid var(--rule);
+    padding: 18px 0 14px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .masthead .mark { color: var(--ink); font-weight: 700; letter-spacing: .18em; }
+  .masthead nav a { margin-left: 22px; color: var(--muted); border-bottom: 0; }
+  .masthead nav a:hover { color: var(--ink); }
+
+  /* Hero */
+  .hero {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 56px;
+    padding: 72px 0 56px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .kicker {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  h1.title {
+    font-size: clamp(44px, 7vw, 84px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin: 0 0 22px;
+    font-weight: 600;
+  }
+  h1.title em { font-style: italic; color: var(--accent); }
+  .lede {
+    font-size: 22px;
+    line-height: 1.45;
+    max-width: 44ch;
+    color: #2a2420;
+  }
+  .hero-meta {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--muted);
+    border-left: 1px solid var(--rule);
+    padding-left: 28px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 22px;
+    align-self: end;
+  }
+  .hero-meta dt { text-transform: uppercase; letter-spacing: .18em; color: var(--ink); font-size: 11px; margin-bottom: 6px; }
+  .hero-meta dd { margin: 0; font-family: var(--serif); font-size: 17px; color: var(--ink); }
+
+  /* Section */
+  section { padding: 64px 0; border-bottom: 1px solid var(--rule); }
+  section:last-of-type { border-bottom: 0; }
+  .section-head {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  .section-label {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding-top: 10px;
+  }
+  .section-head h2 {
+    margin: 0;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    font-weight: 600;
+    max-width: 22ch;
+  }
+
+  /* Modules */
+  .modules { display: grid; grid-template-columns: repeat(12, 1fr); gap: 0; }
+  .module {
+    grid-column: span 12;
+    display: grid;
+    grid-template-columns: 160px 1fr 1fr;
+    gap: 40px;
+    padding: 28px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .module:last-child { border-bottom: 1px solid var(--rule); }
+  .module .num {
+    font-family: var(--sans);
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .module h3 {
+    margin: 0 0 8px;
+    font-size: 26px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .module p { margin: 0; color: #2a2420; }
+  .module ul {
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .module li { padding: 4px 0; border-bottom: 1px dotted rgba(42,33,27,.25); }
+  .module li:last-child { border-bottom: 0; }
+
+  /* Pull quote */
+  .pull {
+    margin: 0;
+    padding: 40px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    text-align: center;
+  }
+  .pull blockquote {
+    margin: 0 auto;
+    max-width: 22ch;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.15;
+    font-style: italic;
+    letter-spacing: -0.01em;
+  }
+  .pull cite {
+    display: block;
+    margin-top: 16px;
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 12px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Interview card */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .card {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .card .tag {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .card h4 { margin: 0; font-size: 20px; letter-spacing: -0.01em; }
+  .card p { margin: 0; font-size: 15px; color: #2a2420; }
+
+  /* Workshop form */
+  .workshop {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .workshop p { margin: 0 0 16px; }
+  form.bio-form {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 28px;
+    display: grid;
+    gap: 14px;
+  }
+  form.bio-form label {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 6px;
+  }
+  form.bio-form input,
+  form.bio-form textarea {
+    width: 100%;
+    font: inherit;
+    font-family: var(--serif);
+    font-size: 17px;
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 0;
+  }
+  form.bio-form textarea { min-height: 110px; resize: vertical; }
+  form.bio-form button {
+    justify-self: start;
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    padding: 12px 22px;
+    background: var(--ink);
+    color: var(--paper);
+    border: 0;
+    cursor: pointer;
+  }
+  form.bio-form button:hover { background: var(--accent); }
+  .preview {
+    margin-top: 28px;
+    padding: 24px;
+    border-top: 1px solid var(--rule);
+    display: none;
+  }
+  .preview.show { display: block; }
+  .preview h5 {
+    margin: 0 0 10px;
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .preview p { margin: 0; font-size: 18px; line-height: 1.5; }
+
+  /* Footer */
+  footer {
+    padding: 40px 0 60px;
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    border-top: 2px solid var(--rule);
+  }
+
+  @media (max-width: 820px) {
+    .hero { grid-template-columns: 1fr; gap: 32px; padding: 48px 0 40px; }
+    .hero-meta { border-left: 0; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 20px; grid-template-columns: 1fr 1fr; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; }
+    .module { grid-template-columns: 1fr; gap: 10px; padding: 22px 0; }
+    .cards { grid-template-columns: 1fr; }
+    .workshop { grid-template-columns: 1fr; gap: 28px; }
+    .masthead nav a { margin-left: 14px; }
+  }
+</style>
+</head>
+<body>
+  <header class="masthead wrap">
+    <span class="mark">BIO·101</span>
+    <nav>
+      <a href="#syllabus">Syllabus</a>
+      <a href="#modules">Modules</a>
+      <a href="#methods">Methods</a>
+      <a href="#workshop">Workshop</a>
+    </nav>
+    <span>Spring Term · 2026</span>
+  </header>
+
+  <div class="wrap">
+    <section class="hero" aria-labelledby="title">
+      <div>
+        <div class="kicker">Course No. 101 · The Craft of Biography</div>
+        <h1 class="title" id="title">Every life is a <em>draft</em> waiting to be told.</h1>
+        <p class="lede">A short, practical course on writing honest, vivid biographies — from the first interview to the final paragraph. No prior writing required, just curiosity and a notebook.</p>
+      </div>
+      <dl class="hero-meta">
+        <div><dt>Format</dt><dd>Six self-paced modules</dd></div>
+        <div><dt>Time</dt><dd>~8 hours total</dd></div>
+        <div><dt>Tools</dt><dd>Notebook, recorder, one patient subject</dd></div>
+        <div><dt>Prerequisite</dt><dd>None</dd></div>
+      </dl>
+    </section>
+
+    <section id="syllabus">
+      <div class="section-head">
+        <div class="section-label">01 — Syllabus</div>
+        <h2>Biography is listening, shaped into narrative.</h2>
+      </div>
+      <p style="max-width: 62ch; font-size: 19px;">
+        This course treats biography as a form of close attention. You will learn to research
+        without drowning, to interview without interrogating, to structure a life without
+        flattening it, and to write sentences that sound like a person, not a résumé. By
+        the end you will have drafted a five-hundred-word portrait of someone real.
+      </p>
+    </section>
+
+    <section id="modules">
+      <div class="section-head">
+        <div class="section-label">02 — Modules</div>
+        <h2>Six movements, from blank page to finished portrait.</h2>
+      </div>
+      <div class="modules">
+        <article class="module">
+          <div class="num">Module 01</div>
+          <div>
+            <h3>The Premise</h3>
+            <p>What makes a life worth writing? We read short portraits by Plutarch, Boswell, and Hermione Lee to notice what the writer chooses — and what they leave out.</p>
+          </div>
+          <ul>
+            <li>Reading: <em>Eminent Victorians</em>, ch. 1</li>
+            <li>Exercise: 200-word pitch</li>
+            <li>Time: 60 min</li>
+          </ul>
+        </article>
+
+        <article class="module">
+          <div class="num">Module 02</div>
+          <div>
+            <h3>Research Without Drowning</h3>
+            <p>Primary vs. secondary sources, archives, public records, and the etiquette of asking a family for letters. How to take notes you will actually be able to find again.</p>
+          </div>
+          <ul>
+            <li>Reading: Tuchman, “In Search of History”</li>
+            <li>Exercise: Source map</li>
+            <li>Time: 90 min</li>
+          </ul>
+        </article>
+
+        <article class="module">
+          <div class="num">Module 03</div>
+          <div>
+            <h3>The Interview</h3>
+            <p>Preparing questions that open rather than close. Silence as a tool. Transcribing, verifying, and — most important — knowing when to stop.</p>
+          </div>
+          <ul>
+            <li>Reading: Terkel, <em>Working</em> (intro)</li>
+            <li>Exercise: One 30-min interview</li>
+            <li>Time: 2 hrs</li>
+          </ul>
+        </article>
+
+        <article class="module">
+          <div class="num">Module 04</div>
+          <div>
+            <h3>Structure &amp; Shape</h3>
+            <p>Chronology is the obvious choice, and often the wrong one. Spiral, mosaic, single day, single object — choosing a shape that fits the life you are writing.</p>
+          </div>
+          <ul>
+            <li>Reading: Ginzburg, <em>Family Lexicon</em> (excerpt)</li>
+            <li>Exercise: Outline in 9 beats</li>
+            <li>Time: 60 min</li>
+          </ul>
+        </article>
+
+        <article class="module">
+          <div class="num">Module 05</div>
+          <div>
+            <h3>Voice &amp; Scene</h3>
+            <p>Making a stranger feel alive on the page. Concrete detail, dialogue, and the ethics of imagined interior life. When to show; when to say.</p>
+          </div>
+          <ul>
+            <li>Reading: Malcolm, <em>The Silent Woman</em></li>
+            <li>Exercise: One scene, 250 words</li>
+            <li>Time: 75 min</li>
+          </ul>
+        </article>
+
+        <article class="module">
+          <div class="num">Module 06</div>
+          <div>
+            <h3>Revision &amp; Responsibility</h3>
+            <p>Fact-checking yourself. What your subject gets to read before publication. Cutting your favorite sentence. Shipping.</p>
+          </div>
+          <ul>
+            <li>Reading: Lee, “How to End It”</li>
+            <li>Exercise: Final 500-word draft</li>
+            <li>Time: 90 min</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <figure class="pull">
+      <blockquote>“The past is a foreign country; they do things differently there.”</blockquote>
+      <cite>— L. P. Hartley, <em>The Go-Between</em></cite>
+    </figure>
+
+    <section id="methods">
+      <div class="section-head">
+        <div class="section-label">03 — Methods</div>
+        <h2>Three habits that separate a biography from a summary.</h2>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <span class="tag">Habit 01</span>
+          <h4>Collect more than you need.</h4>
+          <p>For every fact you will use, gather five you will not. The ones you discard still shape the tone of the ones you keep.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Habit 02</span>
+          <h4>Write for the specific, not the general.</h4>
+          <p>“A woman” is nobody. “A woman who kept cigarettes in a tin labeled <em>Assam</em>” is already alive.</p>
+        </article>
+        <article class="card">
+          <span class="tag">Habit 03</span>
+          <h4>Let the subject surprise you.</h4>
+          <p>If the person on the page only confirms what you already believed, you have written an opinion, not a biography. Revise until something in them resists you.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="workshop">
+      <div class="section-head">
+        <div class="section-label">04 — Workshop</div>
+        <h2>Write your opening paragraph, right now.</h2>
+      </div>
+      <div class="workshop">
+        <div>
+          <p>The hardest sentence in any biography is the first. Use the prompts on the right to sketch an opening for someone you know — a grandparent, a neighbor, a friend — in under five minutes.</p>
+          <p>Don't try to cover their whole life. Pick a single detail, a single room, a single morning. The rest of the life will arrive through the door you open.</p>
+        </div>
+        <form class="bio-form" id="bioForm" novalidate>
+          <div>
+            <label for="subject">Your subject</label>
+            <input id="subject" name="subject" type="text" placeholder="e.g. My grandmother, Ines" required />
+          </div>
+          <div>
+            <label for="detail">One concrete detail</label>
+            <input id="detail" name="detail" type="text" placeholder="e.g. a green enamel kettle" required />
+          </div>
+          <div>
+            <label for="place">Where &amp; when</label>
+            <input id="place" name="place" type="text" placeholder="e.g. her kitchen, winter 1987" required />
+          </div>
+          <div>
+            <label for="verb">What they were doing</label>
+            <input id="verb" name="verb" type="text" placeholder="e.g. listening to the radio in Portuguese" required />
+          </div>
+          <button type="submit">Draft opening line</button>
+          <div class="preview" id="preview" aria-live="polite">
+            <h5>Your opening</h5>
+            <p id="previewText"></p>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <footer class="wrap">
+    <span>Biography 101 · Spring 2026</span>
+    <span>An introduction to the craft</span>
+  </footer>
+
+  <script>
+    (function () {
+      var form = document.getElementById('bioForm');
+      var preview = document.getElementById('preview');
+      var text = document.getElementById('previewText');
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var subject = document.getElementById('subject').value.trim();
+        var detail = document.getElementById('detail').value.trim();
+        var place = document.getElementById('place').value.trim();
+        var verb = document.getElementById('verb').value.trim();
+        if (!subject || !detail || !place || !verb) return;
+        var line = 'In ' + place + ', ' + subject + ' was ' + verb + ', and there, beside her, ' + detail + '.';
+        text.textContent = line;
+        preview.classList.add('show');
+      });
+    })();
+  </script>
+</body>
+</html>
