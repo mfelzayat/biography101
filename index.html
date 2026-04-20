@@ -74,6 +74,67 @@
   [data-section] { scrollbar-width: none; }
   button { font-family: inherit; }
   img { display: block; max-width: 100%; }
+
+  /* ---- Content animations (added) ---- */
+
+  /* Slow Ken-Burns drift on full-bleed hero imagery.
+     Targets decorative <img alt=""> that fills its parent as a cover image. */
+  @keyframes kenburns {
+    0%   { transform: scale(1.02) translate3d(0,      0,      0); }
+    50%  { transform: scale(1.08) translate3d(-1.2%, -0.8%,   0); }
+    100% { transform: scale(1.04) translate3d( 0.8%,  0.6%,   0); }
+  }
+  img[alt=""][style*="object-fit: cover"][style*="height: 100%"] {
+    animation: kenburns 28s ease-in-out infinite alternate;
+    transform-origin: center center;
+    will-change: transform;
+  }
+
+  /* Staggered reveal for grid tiles (episodes, atelier, wardrobe, specs).
+     Applies when a slide mounts; first nine items cascade in. */
+  @keyframes tileRise {
+    from { opacity: 0; transform: translateY(22px) scale(.985); filter: blur(6px); }
+    to   { opacity: 1; transform: translateY(0) scale(1);       filter: blur(0); }
+  }
+  .slide-content [style*="grid-template-columns"] > * {
+    animation: tileRise .9s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .slide-content [style*="grid-template-columns"] > *:nth-child(1) { animation-delay: .45s; }
+  .slide-content [style*="grid-template-columns"] > *:nth-child(2) { animation-delay: .55s; }
+  .slide-content [style*="grid-template-columns"] > *:nth-child(3) { animation-delay: .65s; }
+  .slide-content [style*="grid-template-columns"] > *:nth-child(4) { animation-delay: .75s; }
+  .slide-content [style*="grid-template-columns"] > *:nth-child(5) { animation-delay: .85s; }
+  .slide-content [style*="grid-template-columns"] > *:nth-child(6) { animation-delay: .95s; }
+  .slide-content [style*="grid-template-columns"] > *:nth-child(7) { animation-delay: 1.05s; }
+  .slide-content [style*="grid-template-columns"] > *:nth-child(8) { animation-delay: 1.15s; }
+  .slide-content [style*="grid-template-columns"] > *:nth-child(9) { animation-delay: 1.25s; }
+
+  /* Gentle lift on interactive tiles (episodes, atelier cards). */
+  [role="button"], button, [style*="cursor: pointer"] {
+    transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s ease, filter .5s ease;
+  }
+  [role="button"]:hover, button:hover, [style*="cursor: pointer"]:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.04);
+  }
+
+  /* Slow breathing glow on amber/sage accent spans (decorative color emphasis). */
+  @keyframes accentPulse {
+    0%, 100% { opacity: 0.78; }
+    50%      { opacity: 1;    }
+  }
+  [style*="color: rgb(200, 169, 110)"],
+  [style*="color: #C8A96E"] {
+    animation: accentPulse 4.2s ease-in-out infinite;
+  }
+
+  /* Respect users who prefer reduced motion — kill all decorative loops. */
+  @media (prefers-reduced-motion: reduce) {
+    img[alt=""][style*="object-fit: cover"] { animation: none !important; }
+    .slide-content [style*="grid-template-columns"] > * { animation: none !important; }
+    [style*="color: rgb(200, 169, 110)"],
+    [style*="color: #C8A96E"] { animation: none !important; }
+  }
 </style>
 
 
