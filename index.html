@@ -135,6 +135,19 @@
     [style*="color: rgb(200, 169, 110)"],
     [style*="color: #C8A96E"] { animation: none !important; }
   }
+
+  /* ---- Mobile layout ---- */
+  /* The desktop app locks body to 100vh with overflow hidden for the slide deck.
+     On mobile, we render a dedicated vertical layout and need natural scrolling. */
+  @media (max-width: 820px) {
+    html, body {
+      overflow: auto !important;
+      height: auto !important;
+      min-height: 100%;
+      overscroll-behavior-y: none;
+    }
+    body { background: #1A1715; }
+  }
 </style>
 
 
