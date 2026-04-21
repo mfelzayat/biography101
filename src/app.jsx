@@ -853,7 +853,7 @@ function Insight() {
         </h2>
 
         <div style={{
-          display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1fr 1fr", gap: 80,
+          display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1fr 1fr", gap: window.innerWidth < 768 ? 40 : 80,
           marginBottom: 100
         }}>
           <Reveal delay={200}>
@@ -931,7 +931,7 @@ function Overview() {
           </div>
         </h2>
 
-        <div style={{ display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1.2fr 1fr", gap: 80, maxWidth: 900 }}>
+        <div style={{ display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1.2fr 1fr", gap: window.innerWidth < 768 ? 40 : 80, maxWidth: 900 }}>
           <Reveal delay={300}>
             <div style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.3em", color: P.mv, marginBottom: 16 }}>THE REBRAND</div>
             <p style={{ fontFamily: ss, fontSize: 17, lineHeight: 1.65, color: "rgba(245,240,235,0.85)" }}>
@@ -1228,7 +1228,7 @@ function Episodes() {
 
         {/* Featured episode — title moved INSIDE, beside the details */}
         <div style={{
-          display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "360px 1fr", gap: 64,
+          display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "360px 1fr", gap: window.innerWidth < 768 ? 32 : 64,
           alignItems: "center", marginBottom: 32, flex: 1, minHeight: 0
         }}>
           {/* Phone mock */}

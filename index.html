@@ -161,8 +161,11 @@
   /* Mobile optimizations */
   @media (max-width: 767px) {
     body { overflow: auto; }
-    [data-slide-frame] { height: auto; width: 100%; overflow: visible; }
+    [data-slide-frame] { height: auto; width: 100%; overflow: visible; min-height: 100vh; }
     [data-scroll-container] { overflow-y: auto; height: auto; }
+    .slide-content { padding: 24px 16px !important; }
+    /* Adjust image heights for mobile */
+    [data-slide-frame] img { max-height: 400px; }
     /* Disable touch hover effects on mobile */
     @media (hover: none) {
       [role="button"]:hover, button:hover, [style*="cursor: pointer"]:hover {
