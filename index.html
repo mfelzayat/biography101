@@ -18,10 +18,10 @@
     height: 100vh;
     margin: 0;
   }
-  ::selection { background: #D4BFC6; color: #1A1715; }
+  ::selection { background: #A88B96; color: #F7ECEF; }
   body::-webkit-scrollbar { width: 8px; }
-  body::-webkit-scrollbar-track { background: #EBE4DB; }
-  body::-webkit-scrollbar-thumb { background: #A88B96; border-radius: 4px; }
+  body::-webkit-scrollbar-track { background: #D4BFC6; }
+  body::-webkit-scrollbar-thumb { background: #7E6570; border-radius: 4px; }
 
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
@@ -223,8 +223,8 @@ const { useState, useRef, useEffect, useCallback } = React;
 
 // Palette
 const P = {
-  bg: "#F5F0EB", bg2: "#EBE4DB", bg3: "#DDD5CB",
-  mv: "#D4BFC6", mvd: "#A88B96", mvl: "#E8D7DD",
+  bg: "#E5D3D9", bg2: "#D4BFC6", bg3: "#BFA8AE",
+  mv: "#A88B96", mvd: "#7E6570", mvl: "#EFDCE2",
   ch: "#1A1715", ch2: "#2C2825", ts: "#5A524B", tm: "#9A8E82",
   amber: "#C8A96E", sage: "#7B8F6A"
 };
@@ -279,13 +279,13 @@ function useMouse() {
 // ==================== DATA ====================
 const SECS = [
   { id: "cover", l: "Prologue", n: "00", bg: "#1A1715" },
-  { id: "insight", l: "The Insight", n: "01", bg: "#F5F0EB" },
+  { id: "insight", l: "The Insight", n: "01", bg: "#E5D3D9" },
   { id: "overview", l: "The Company", n: "02", bg: "#1A1715" },
-  { id: "concept", l: "The Concept", n: "03", bg: "#F5F0EB" },
+  { id: "concept", l: "The Concept", n: "03", bg: "#E5D3D9" },
   { id: "episodes", l: "Nine Truths", n: "04", bg: "#2A2421" },
-  { id: "craft", l: "The Craft", n: "05", bg: "#EBE4DB" },
-  { id: "atelier", l: "The Atelier", n: "06", bg: "#F5F0EB" },
-  { id: "schedule", l: "Timeline", n: "07", bg: "#F5F0EB" },
+  { id: "craft", l: "The Craft", n: "05", bg: "#D4BFC6" },
+  { id: "atelier", l: "The Atelier", n: "06", bg: "#E5D3D9" },
+  { id: "schedule", l: "Timeline", n: "07", bg: "#E5D3D9" },
   { id: "rollout", l: "Rollout", n: "08", bg: "#1A1715" },
   { id: "close", l: "Begin", n: "09", bg: "#1A1715" }
 ];
@@ -303,7 +303,7 @@ const EPS = [
 ];
 
 // ==================== SLIDE FRAME (16:9, scales to viewport) ====================
-function SlideFrame({ children, bg = "#F5F0EB", id }) {
+function SlideFrame({ children, bg = "#E5D3D9", id }) {
   const [scale, setScale] = useState(1);
   const outerRef = useRef(null);
 
@@ -417,7 +417,7 @@ function SideNav({ active, onGo, open, setOpen, audioOn, toggleAudio }) {
   const curIdx = SECS.findIndex(s => s.id === active);
   const cur = SECS[curIdx] || SECS[0];
   // Proper luminance check: parse hex, compute perceived brightness
-  const hx = (cur.bg || "#F5F0EB").replace("#", "");
+  const hx = (cur.bg || "#E5D3D9").replace("#", "");
   const r = parseInt(hx.slice(0,2), 16), g = parseInt(hx.slice(2,4), 16), b = parseInt(hx.slice(4,6), 16);
   const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   const isDark = lum < 0.5;
@@ -1825,10 +1825,10 @@ function VisualTab() {
         <div style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.2em", color: P.mvd, marginBottom: 12 }}>COLOUR PALETTE</div>
         <div style={{ display: "flex", height: 80, borderRadius: 2, overflow: "hidden" }}>
           {[
-            ["#F5F0EB", "Linen", "BG"],
-            ["#EBE4DB", "Oat", "BG-2"],
-            ["#D4BFC6", "Mauve", "ACCENT"],
-            ["#A88B96", "Mauve Dark", "ACCENT-2"],
+            ["#E5D3D9", "Blush", "BG"],
+            ["#D4BFC6", "Mauve", "BG-2"],
+            ["#A88B96", "Mauve Dark", "ACCENT"],
+            ["#7E6570", "Mauve Deep", "ACCENT-2"],
             ["#C8A96E", "Amber", "WARM"],
             ["#5A524B", "Stone", "TEXT"],
             ["#1A1715", "Charcoal", "INK"]
@@ -1836,7 +1836,7 @@ function VisualTab() {
             <div key={i} style={{
               flex: 1, background: c, position: "relative",
               display: "flex", alignItems: "flex-end", padding: 12,
-              color: c === "#1A1715" || c === "#5A524B" || c === "#A88B96" ? P.bg : P.ch,
+              color: c === "#1A1715" || c === "#5A524B" || c === "#A88B96" || c === "#7E6570" ? P.bg : P.ch,
               cursor: "pointer"
             }}>
               <div>
@@ -3061,7 +3061,7 @@ function App() {
       <SlideFrame id="overview" bg="#1A1715"><Overview /></SlideFrame>
       <SlideFrame id="concept" bg={P.bg}><Concept /></SlideFrame>
       <SlideFrame id="episodes" bg="#2A2421"><Episodes /></SlideFrame>
-      <SlideFrame id="craft" bg="#EBE4DB"><Craft /></SlideFrame>
+      <SlideFrame id="craft" bg="#D4BFC6"><Craft /></SlideFrame>
       <SlideFrame id="atelier" bg={P.bg}><Atelier /></SlideFrame>
       <SlideFrame id="schedule" bg={P.bg}><Schedule /></SlideFrame>
       <SlideFrame id="rollout" bg="#1A1715"><Rollout /></SlideFrame>
