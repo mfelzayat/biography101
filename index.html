@@ -3212,9 +3212,15 @@ function App() {
       else if (e.key === "Home") { e.preventDefault(); go(SECS[0].id); }
       else if (e.key === "End") { e.preventDefault(); go(SECS[SECS.length-1].id); }
     };
-    window.addEventListener("keydown", onKey);
+    window.addEventListener("keydown", onKey, { passive: false });
     return () => window.removeEventListener("keydown", onKey);
   }, [active]);
+
+  // Swipe navigation on mobile
+  useSwipe(
+    () => { const i = SECS.findIndex(s => s.id === active); if (i < SECS.length - 1) go(SECS[i+1].id); },
+    () => { const i = SECS.findIndex(s => s.id === active); if (i > 0) go(SECS[i-1].id); }
+  );
 
   useEffect(() => {
     const sections = SECS.map(s => document.querySelector(`[data-section="${s.id}"]`)).filter(Boolean);
@@ -3235,6 +3241,61 @@ function App() {
     }
   }, [active]);
 
+  const { mobile } = useResponsive();
+
+  // Mobile: Long single-page layout
+  if (mobile) {
+    return (
+      <div data-scroll-container style={{
+        background: "#0a0908",
+        color: P.ch,
+        width: "100vw",
+        minHeight: "100vh",
+        overflowY: "auto",
+        overflowX: "hidden",
+        scrollBehavior: "smooth",
+        display: "flex",
+        flexDirection: "column"
+      }}>
+        <TopBar />
+        <SideNav active={active} onGo={go} open={menuOpen} setOpen={setMenuOpen} audioOn={audioOn} toggleAudio={toggleAudio} />
+
+        {/* Mobile: Long page content - all sections stacked */}
+        <div id="cover" data-section="cover" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
+          <Cover />
+        </div>
+        <div id="insight" data-section="insight" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
+          <Insight />
+        </div>
+        <div id="overview" data-section="overview" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
+          <Overview />
+        </div>
+        <div id="concept" data-section="concept" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
+          <Concept />
+        </div>
+        <div id="episodes" data-section="episodes" style={{ background: "#2A2421", padding: "40px 20px", minHeight: "auto" }}>
+          <Episodes />
+        </div>
+        <div id="craft" data-section="craft" style={{ background: "#D4BFC6", padding: "40px 20px", minHeight: "auto" }}>
+          <Craft />
+        </div>
+        <div id="atelier" data-section="atelier" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
+          <Atelier />
+        </div>
+        <div id="schedule" data-section="schedule" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
+          <Schedule />
+        </div>
+        <div id="rollout" data-section="rollout" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
+          <Rollout />
+        </div>
+        <div id="close" data-section="close" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
+          <Close />
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop: Slide-based layout with SlideFrame
   return (
     <div data-scroll-container style={{
       background: P.bg,
