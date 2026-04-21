@@ -36,9 +36,21 @@
     background: #0a0908;
     color: #1A1715;
     -webkit-font-smoothing: antialiased;
-    overflow: hidden;
-    height: 100vh;
     margin: 0;
+  }
+
+  @media (max-width: 767px) {
+    html, body {
+      overflow: auto !important;
+      height: auto !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    html, body {
+      overflow: hidden;
+      height: 100vh;
+    }
   }
   ::selection { background: #A88B96; color: #F7ECEF; }
   body::-webkit-scrollbar { width: 8px; }
