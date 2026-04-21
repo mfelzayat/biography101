@@ -26,6 +26,10 @@ function ResponsiveGrid({ children, desktop, mobile = 1, gap = 24, style = {}, .
   );
 }
 
+function rfs(desktop, mobile) {
+  return window.innerWidth < 768 ? mobile : desktop;
+}
+
 // ==================== HOOKS ====================
 function useInView(threshold = 0.2) {
   const ref = useRef(null);
@@ -702,7 +706,7 @@ function Cover() {
           <div style={{ maxWidth: "70%" }}>
             <div style={{ overflow: "hidden", marginBottom: 8 }}>
               <div style={{
-                fontFamily: sf, fontSize: 28, fontStyle: "italic", fontWeight: 300,
+                fontFamily: sf, fontSize: rfs(28, 20), fontStyle: "italic", fontWeight: 300,
                 color: P.mv,
                 transform: inView ? "translateY(0)" : "translateY(100%)",
                 opacity: inView ? 1 : 0,
@@ -755,7 +759,7 @@ function Cover() {
               ].map(([l, v, s], i) => (
                 <div key={i}>
                   <div style={{ fontFamily: mn, fontSize: 9, letterSpacing: "0.2em", opacity: 0.5, marginBottom: 6 }}>{l}</div>
-                  <div style={{ fontFamily: sf, fontSize: 18, fontWeight: 500 }}>{v}</div>
+                  <div style={{ fontFamily: sf, fontSize: rfs(18, 14), fontWeight: 500 }}>{v}</div>
                   <div style={{ fontFamily: mn, fontSize: 10, opacity: 0.6, marginTop: 2 }}>{s}</div>
                 </div>
               ))}
@@ -1068,7 +1072,7 @@ function Concept() {
                 paddingBottom: 14, borderBottom: `1px solid ${P.bg3}`
               }}>
                 <span style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.3em", color: P.mvd }}>THE SERIES</span>
-                <span style={{ fontFamily: sf, fontSize: 26, fontStyle: "italic", color: P.ch, fontWeight: 400 }}>
+                <span style={{ fontFamily: sf, fontSize: rfs(26, 18), fontStyle: "italic", color: P.ch, fontWeight: 400 }}>
                   Biography 101
                 </span>
                 <span style={{ flex: 1 }}/>
@@ -1077,7 +1081,7 @@ function Concept() {
 
               {/* Lede — pull-quote */}
               <div style={{
-                fontFamily: sf, fontSize: 28, fontWeight: 300, lineHeight: 1.25,
+                fontFamily: sf, fontSize: rfs(28, 20), fontWeight: 300, lineHeight: 1.25,
                 color: P.ch, letterSpacing: "-0.005em", marginBottom: 22
               }}>
                 A nine-part documentary <em>portrait</em> of the people who design, build, sell and inhabit Biography — released as the public face of the company's rebrand from Attal Properties.
@@ -1095,7 +1099,7 @@ function Concept() {
 
               {/* Body */}
               <div style={{
-                fontFamily: ss, fontSize: 16, lineHeight: 1.65, color: P.ts,
+                fontFamily: ss, fontSize: rfs(16, 14), lineHeight: 1.65, color: P.ts,
                 marginBottom: 22, columnCount: window.innerWidth < 768 ? 1 : 2, columnGap: 32
               }}>
                 <p style={{ marginBottom: 12 }}>
@@ -1122,7 +1126,7 @@ function Concept() {
                     <div style={{ fontFamily: mn, fontSize: 8.5, letterSpacing: "0.26em", color: P.mvd, marginBottom: 4 }}>
                       {l}
                     </div>
-                    <div style={{ fontFamily: sf, fontSize: 18, color: P.ch, fontWeight: 400 }}>
+                    <div style={{ fontFamily: sf, fontSize: rfs(18, 14), color: P.ch, fontWeight: 400 }}>
                       {v}
                     </div>
                   </div>
@@ -1331,7 +1335,7 @@ function Episodes() {
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {/* Section title — moved here to fill the top-right empty space */}
             <h2 style={{
-              fontFamily: sf, fontSize: 84,
+              fontFamily: sf, fontSize: rfs(84, 48),
               fontWeight: 200, lineHeight: 0.95, letterSpacing: "-0.03em",
               margin: 0, marginBottom: 40
             }}>
@@ -1347,12 +1351,12 @@ function Episodes() {
             }}>EPISODE {EPS[active].n} / 9</div>
 
             <h3 style={{
-              fontFamily: sf, fontSize: 56, fontWeight: 300, margin: 0,
+              fontFamily: sf, fontSize: rfs(56, 32), fontWeight: 300, margin: 0,
               lineHeight: 1, letterSpacing: "-0.02em", marginBottom: 6
             }}>{EPS[active].t}</h3>
 
             <div style={{
-              fontFamily: sf, fontSize: 18, fontStyle: "italic",
+              fontFamily: sf, fontSize: rfs(18, 14), fontStyle: "italic",
               color: P.mv, marginBottom: 20
             }}>
               {EPS[active].s} <span style={{ opacity: 0.5 }}>·</span> {EPS[active].r}
@@ -1405,7 +1409,7 @@ function Episodes() {
           padding: "14px 0",
           borderTop: "1px solid rgba(245,240,235,0.1)",
           borderBottom: "1px solid rgba(245,240,235,0.1)",
-          fontFamily: sf, fontSize: 24, fontStyle: "italic",
+          fontFamily: sf, fontSize: rfs(24, 16), fontStyle: "italic",
           color: "rgba(245,240,235,0.4)"
         }}>
           <Marquee items={EPS.map(e => `${e.n} · ${e.t}`)} speed={60} />
@@ -1692,7 +1696,7 @@ function VisualTab() {
           <div key={i} style={{ background: P.bg2, padding: "32px 28px" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 12 }}>
               <span style={{ fontFamily: mn, fontSize: 10, color: P.mvd, letterSpacing: "0.2em" }}>0{i + 1}</span>
-              <h4 style={{ fontFamily: sf, fontSize: 24, fontWeight: 400, fontStyle: "italic", margin: 0, color: P.ch }}>{t}</h4>
+              <h4 style={{ fontFamily: sf, fontSize: rfs(24, 16), fontWeight: 400, fontStyle: "italic", margin: 0, color: P.ch }}>{t}</h4>
             </div>
             <p style={{ fontFamily: ss, fontSize: 14, lineHeight: 1.6, color: P.ts, margin: 0 }}>{d}</p>
           </div>
@@ -1739,7 +1743,7 @@ function SoundTab() {
         }}>REFERENCE SCORE</div>
 
         <h3 style={{
-          fontFamily: sf, fontSize: 56, fontWeight: 200,
+          fontFamily: sf, fontSize: rfs(56, 32), fontWeight: 200,
           lineHeight: 1, margin: 0, marginBottom: 40
         }}>
           Solo piano.<br/>
@@ -1769,7 +1773,7 @@ function SoundTab() {
           <button onClick={toggle} style={{
             display: "flex", alignItems: "center", gap: 16,
             background: P.mv, color: P.ch, border: "none",
-            padding: "16px 28px", cursor: "pointer",
+            padding: window.innerWidth < 768 ? "12px 16px" : "16px 28px", cursor: "pointer",
             fontFamily: mn, fontSize: 11, letterSpacing: "0.25em",
             textTransform: "uppercase", borderRadius: 100
           }}>
@@ -1798,7 +1802,7 @@ function SoundTab() {
         ].map(([t, d], i) => (
           <div key={i} style={{ background: P.bg2, padding: "32px 28px" }}>
             <div style={{ fontFamily: mn, fontSize: 10, color: P.mvd, letterSpacing: "0.2em", marginBottom: 12 }}>0{i + 1}</div>
-            <h4 style={{ fontFamily: sf, fontSize: 24, fontStyle: "italic", fontWeight: 400, margin: 0, marginBottom: 8, color: P.ch }}>{t}</h4>
+            <h4 style={{ fontFamily: sf, fontSize: rfs(24, 16), fontStyle: "italic", fontWeight: 400, margin: 0, marginBottom: 8, color: P.ch }}>{t}</h4>
             <p style={{ fontFamily: ss, fontSize: 14, lineHeight: 1.6, color: P.ts, margin: 0 }}>{d}</p>
           </div>
         ))}
@@ -1845,7 +1849,7 @@ function SpecsTab() {
           color: P.mv, marginBottom: 10
         }}>{kicker}</div>
         <div style={{
-          fontFamily: sf, fontSize: 26, fontWeight: 400,
+          fontFamily: sf, fontSize: rfs(26, 18), fontWeight: 400,
           lineHeight: 1.1, marginBottom: 4
         }}>{title}</div>
         <div style={{
@@ -1897,7 +1901,7 @@ function SpecsTab() {
              onMouseLeave={e => e.currentTarget.style.background = P.bg2}
           >
             <div style={{ fontFamily: mn, fontSize: 9, letterSpacing: "0.2em", color: P.mvd, marginBottom: 10 }}>{l}</div>
-            <div style={{ fontFamily: sf, fontSize: 18, fontWeight: 500, color: P.ch, marginBottom: 4, lineHeight: 1.2 }}>{v}</div>
+            <div style={{ fontFamily: sf, fontSize: rfs(18, 14), fontWeight: 500, color: P.ch, marginBottom: 4, lineHeight: 1.2 }}>{v}</div>
             <div style={{ fontFamily: mn, fontSize: 9, color: P.tm }}>{s}</div>
           </div>
         ))}
@@ -2018,7 +2022,7 @@ function Atelier() {
                   color: tab === k ? P.ch : P.mvd, width: 18
                 }}>0{i + 1}</span>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontFamily: sf, fontSize: 18, fontWeight: tab === k ? 500 : 400, letterSpacing: "-0.005em", lineHeight: 1.1 }}>
+                  <div style={{ fontFamily: sf, fontSize: rfs(18, 14), fontWeight: tab === k ? 500 : 400, letterSpacing: "-0.005em", lineHeight: 1.1 }}>
                     {l}
                   </div>
                   <div style={{ fontFamily: sf, fontSize: 11.5, fontStyle: "italic", color: P.tm, marginTop: 2 }}>{sub}</div>
@@ -2180,7 +2184,7 @@ function Atelier() {
                           {/* episode label over image */}
                           <div style={{ position: "absolute", top: 14, left: 14, display: "flex", alignItems: "baseline", gap: 10 }}>
                             <span style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.3em", color: P.mv, background: "rgba(26,23,21,0.55)", padding: "4px 8px", backdropFilter: "blur(4px)" }}>EP {s.ep}</span>
-                            <span style={{ fontFamily: sf, fontSize: 28, fontStyle: "italic", color: P.bg, textShadow: "0 2px 14px rgba(0,0,0,0.55)" }}>{s.t}</span>
+                            <span style={{ fontFamily: sf, fontSize: rfs(28, 20), fontStyle: "italic", color: P.bg, textShadow: "0 2px 14px rgba(0,0,0,0.55)" }}>{s.t}</span>
                           </div>
                         </div>
                       ) : (
@@ -2198,7 +2202,7 @@ function Atelier() {
                           </div>
                           <div style={{ position: "absolute", top: 14, left: 14, display: "flex", alignItems: "baseline", gap: 10 }}>
                             <span style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.3em", color: P.mv, background: "rgba(26,23,21,0.45)", padding: "4px 8px" }}>EP {s.ep}</span>
-                            <span style={{ fontFamily: sf, fontSize: 28, fontStyle: "italic", color: P.bg }}>{s.t}</span>
+                            <span style={{ fontFamily: sf, fontSize: rfs(28, 20), fontStyle: "italic", color: P.bg }}>{s.t}</span>
                           </div>
                           <div style={{ position: "absolute", top: 14, right: 14, fontFamily: mn, fontSize: 8.5, letterSpacing: "0.26em", color: P.mv, padding: "3px 8px", background: "rgba(26,23,21,0.45)" }}>
                             IMAGE · TBD
@@ -2345,7 +2349,7 @@ function Atelier() {
                     "Bright accessories"
                   ].map((t, i) => (
                     <div key={i} style={{
-                      fontFamily: sf, fontSize: 18, color: "rgba(245,240,235,0.85)",
+                      fontFamily: sf, fontSize: rfs(18, 14), color: "rgba(245,240,235,0.85)",
                       padding: "10px 0", borderTop: i > 0 ? "1px solid rgba(245,240,235,0.15)" : "none",
                       display: "flex", alignItems: "center", gap: 12,
                       textDecoration: "line-through", textDecorationColor: "rgba(168,139,150,0.5)"
@@ -2706,7 +2710,7 @@ function Team() {
                 e.currentTarget.style.color = P.ch;
               }}>
                 <div style={{ fontFamily: mn, fontSize: 9, letterSpacing: "0.2em", opacity: 0.5 }}>{r.toUpperCase()}</div>
-                <div style={{ fontFamily: sf, fontSize: 24, fontWeight: 400 }}>{n}</div>
+                <div style={{ fontFamily: sf, fontSize: rfs(24, 16), fontWeight: 400 }}>{n}</div>
               </div>
             </Reveal>
           ))}
