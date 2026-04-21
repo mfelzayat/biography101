@@ -158,6 +158,19 @@
     [style*="color: #C8A96E"] { animation: none !important; }
   }
 
+  /* Mobile optimizations */
+  @media (max-width: 767px) {
+    body { overflow: auto; }
+    [data-slide-frame] { height: auto; width: 100%; overflow: visible; }
+    [data-scroll-container] { overflow-y: auto; height: auto; }
+    /* Disable touch hover effects on mobile */
+    @media (hover: none) {
+      [role="button"]:hover, button:hover, [style*="cursor: pointer"]:hover {
+        transform: none;
+      }
+    }
+  }
+
   /* ---- Fullscreen toggle ---- */
   #fs-toggle {
     position: fixed;

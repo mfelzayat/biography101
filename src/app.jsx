@@ -11,6 +11,21 @@ const sf = "'Cormorant Garamond', Georgia, serif";
 const ss = "'Source Serif 4', 'Source Serif Pro', Georgia, serif";
 const mn = "'IBM Plex Mono', 'Courier New', monospace";
 
+function ResponsiveGrid({ children, desktop, mobile = 1, gap = 24, style = {}, ...props }) {
+  const { mobile: isMobile } = useResponsive();
+  const cols = isMobile ? mobile : desktop;
+  return (
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: `repeat(${cols}, 1fr)`,
+      gap: isMobile ? Math.round(gap * 0.6) : gap,
+      ...style
+    }} {...props}>
+      {children}
+    </div>
+  );
+}
+
 // ==================== HOOKS ====================
 function useInView(threshold = 0.2) {
   const ref = useRef(null);
@@ -55,6 +70,19 @@ function useMouse() {
   return m;
 }
 
+function useResponsive() {
+  const [bp, setBp] = useState({ w: window.innerWidth, mobile: window.innerWidth < 768, tablet: window.innerWidth >= 768 && window.innerWidth < 1024, desktop: window.innerWidth >= 1024 });
+  useEffect(() => {
+    const onResize = () => {
+      const w = window.innerWidth;
+      setBp({ w, mobile: w < 768, tablet: w >= 768 && w < 1024, desktop: w >= 1024 });
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  return bp;
+}
+
 // ==================== DATA ====================
 const SECS = [
   { id: "cover", l: "Prologue", n: "00", bg: "#1A1715" },
@@ -81,23 +109,46 @@ const EPS = [
   { n: "109", t: "The Place, Speaking", s: "Composite Finale", r: "All Voices", q: "And then the place began to tell.", d: "No single subject. No single question. Episode 109 layers all eight voices over place imagery — until the series resolves.", c: "#5A524B", img: window.__resources.r_ep9_place_png }
 ];
 
-// ==================== SLIDE FRAME (16:9, scales to viewport) ====================
+// ==================== SLIDE FRAME (16:9 desktop, responsive mobile) ====================
 function SlideFrame({ children, bg = "#F5F0EB", id }) {
   const [scale, setScale] = useState(1);
   const outerRef = useRef(null);
+  const { mobile } = useResponsive();
 
   useEffect(() => {
     const fit = () => {
       if (!outerRef.current) return;
       const r = outerRef.current.getBoundingClientRect();
-      setScale(Math.min(r.width / 1920, r.height / 1080));
+      if (mobile) {
+        setScale(1);
+      } else {
+        setScale(Math.min(r.width / 1920, r.height / 1080));
+      }
     };
     fit();
     const ro = new ResizeObserver(fit);
     if (outerRef.current) ro.observe(outerRef.current);
     window.addEventListener("resize", fit);
     return () => { ro.disconnect(); window.removeEventListener("resize", fit); };
-  }, []);
+  }, [mobile]);
+
+  if (mobile) {
+    return (
+      <div ref={outerRef} data-slide-frame data-section={id} style={{
+        position: "relative",
+        width: "100vw",
+        minHeight: "100vh",
+        background: bg,
+        display: "flex", flexDirection: "column",
+        overflow: "visible",
+        scrollSnapAlign: "start",
+        flexShrink: 0,
+        padding: "24px 16px"
+      }}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div ref={outerRef} data-slide-frame data-section={id} style={{
@@ -239,7 +290,7 @@ function SideNav({ active, onGo, open, setOpen, audioOn, toggleAudio }) {
                 key={s.id}
                 onClick={() => { onGo(s.id); setOpen(false); }}
                 style={{
-                  display: "grid", gridTemplateColumns: "80px 1fr auto",
+                  display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "80px 1fr auto",
                   alignItems: "center", gap: 24,
                   border: "none", background: "transparent",
                   padding: "18px 0", cursor: "pointer",
@@ -693,7 +744,7 @@ function Cover() {
         <div>
           <Reveal delay={1800}>
             <div style={{
-              display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24,
+              display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: 24,
               paddingTop: 24, borderTop: "1px solid rgba(245,240,235,0.2)"
             }}>
               {[
@@ -797,7 +848,7 @@ function Insight() {
         </h2>
 
         <div style={{
-          display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80,
+          display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1fr 1fr", gap: 80,
           marginBottom: 100
         }}>
           <Reveal delay={200}>
@@ -875,7 +926,7 @@ function Overview() {
           </div>
         </h2>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 80, maxWidth: 900 }}>
+        <div style={{ display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1.2fr 1fr", gap: 80, maxWidth: 900 }}>
           <Reveal delay={300}>
             <div style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.3em", color: P.mv, marginBottom: 16 }}>THE REBRAND</div>
             <p style={{ fontFamily: ss, fontSize: 17, lineHeight: 1.65, color: "rgba(245,240,235,0.85)" }}>
@@ -913,7 +964,7 @@ function Overview() {
         {/* Developments row */}
         <Reveal delay={800}>
           <div style={{
-            marginTop: 80, display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+            marginTop: 80, display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
             gap: 1, background: "rgba(245,240,235,0.12)"
           }}>
             {[
@@ -1006,9 +1057,9 @@ function Concept() {
 
         {/* === MAIN ROW: Series description + Hero image === */}
         <div style={{
-          display: "grid", gridTemplateColumns: "1.05fr 1fr", gap: 56,
-          marginBottom: 32
-        }}>
+          display: "grid", gridTemplateColumns: "1fr", gap: spacing(56, 24),
+          marginBottom: spacing(32, 20)
+        }} className="concept-grid">
           {/* LEFT — Series description */}
           <Reveal delay={200}>
             <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -1045,7 +1096,7 @@ function Concept() {
               {/* Body */}
               <div style={{
                 fontFamily: ss, fontSize: 16, lineHeight: 1.65, color: P.ts,
-                marginBottom: 22, columnCount: 2, columnGap: 32
+                marginBottom: 22, columnCount: window.innerWidth < 768 ? 1 : 2, columnGap: 32
               }}>
                 <p style={{ marginBottom: 12 }}>
                   Each episode is a single voice answering a single question across 90 to 120 seconds. No narration. No scripts. No actors. The chairman, the architect, the foreman, the designer, the consultant, the family — each one speaks once, and the place they made does the rest.
@@ -1058,7 +1109,7 @@ function Concept() {
               {/* Format strip */}
               <div style={{
                 marginTop: "auto",
-                display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+                display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
                 gap: 1, background: P.bg3
               }}>
                 {[
@@ -1118,7 +1169,7 @@ function Concept() {
 
         {/* === BOTTOM ROW: 4-col strip — Tone/Structure/Visual/Audio === */}
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+          display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
           gap: 1, background: P.bg3,
           borderTop: `1px solid ${P.bg3}`
         }}>
@@ -1172,7 +1223,7 @@ function Episodes() {
 
         {/* Featured episode — title moved INSIDE, beside the details */}
         <div style={{
-          display: "grid", gridTemplateColumns: "360px 1fr", gap: 64,
+          display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "360px 1fr", gap: 64,
           alignItems: "center", marginBottom: 32, flex: 1, minHeight: 0
         }}>
           {/* Phone mock */}
@@ -1325,7 +1376,7 @@ function Episodes() {
 
         {/* Episode grid - click to switch */}
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(9, 1fr)", gap: 8,
+          display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "repeat(3, 1fr)" : "repeat(9, 1fr)", gap: 8,
           marginBottom: 20
         }}>
           {EPS.map((e, i) => (
@@ -1450,7 +1501,7 @@ function NetflixTab() {
 
         <div style={{
           position: "relative", display: "grid",
-          gridTemplateColumns: "1.15fr 1fr",
+          gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1.15fr 1fr",
           gap: 0
         }}>
           {/* Left: copy */}
@@ -1485,7 +1536,7 @@ function NetflixTab() {
 
             {/* Signature list */}
             <div style={{
-              display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 32px",
+              display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1fr 1fr", gap: "16px 32px",
               paddingTop: 24, borderTop: "1px solid rgba(245,240,235,0.15)"
             }}>
               {[
@@ -1514,7 +1565,7 @@ function NetflixTab() {
           <div style={{
             position: "relative",
             background: "#000",
-            display: "grid", gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr 1fr",
+            display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1fr 1fr", gridTemplateRows: "1fr 1fr 1fr",
             gap: 1
           }}>
             {[
@@ -1564,7 +1615,7 @@ function VisualTab() {
   return (
     <div style={{ animation: "fadeIn 0.6s ease" }}>
       <div style={{
-        display: "grid", gridTemplateColumns: "2fr 1fr", gap: 16, marginBottom: 40
+        display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "2fr 1fr", gap: 16, marginBottom: 40
       }}>
         <div style={{ aspectRatio: "16/10", overflow: "hidden", position: "relative" }}>
           <img src={window.__resources.r_craft_png} alt="" style={{
@@ -1629,7 +1680,7 @@ function VisualTab() {
 
       {/* Principles */}
       <div style={{
-        display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 1,
+        display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "repeat(2, 1fr)", gap: 1,
         background: P.bg3
       }}>
         {[
@@ -1737,7 +1788,7 @@ function SoundTab() {
       </div>
 
       <div style={{
-        display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1,
+        display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "repeat(3, 1fr)", gap: 1,
         background: P.bg3, marginTop: 1
       }}>
         {[
@@ -1814,7 +1865,7 @@ function SpecsTab() {
     <div style={{ animation: "fadeIn 0.6s ease" }}>
       {/* Hero image pair */}
       <div style={{
-        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1,
+        display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1fr 1fr", gap: 1,
         background: P.bg3, marginBottom: 1
       }}>
         <ImageCard
@@ -1835,7 +1886,7 @@ function SpecsTab() {
 
       {/* Spec grid below */}
       <div style={{
-        display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1,
+        display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: 1,
         background: P.bg3
       }}>
         {cells.map(([l, v, s], i) => (
@@ -1910,7 +1961,7 @@ function Atelier() {
                           repeating-linear-gradient(0deg, #000 0 1px, transparent 1px 3px)`
       }}/>
 
-      <div ref={ref} style={{ position: "relative", maxWidth: 1800, margin: "0 auto", height: "100%", display: "grid", gridTemplateColumns: "360px 1fr", gap: 44 }}>
+      <div ref={ref} style={{ position: "relative", maxWidth: 1800, margin: "0 auto", height: "100%", display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "360px 1fr", gap: 44 }}>
 
         {/* ============ LEFT RAIL ============ */}
         <aside style={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -2002,7 +2053,7 @@ function Atelier() {
                     <div key={i} title={p.h} style={{ flex: 1, background: p.c }}/>
                   ))}
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, fontFamily: mn, fontSize: 7.5, letterSpacing: "0.18em", color: P.tm }}>
+                <div style={{ display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1fr 1fr", gap: 6, fontFamily: mn, fontSize: 7.5, letterSpacing: "0.18em", color: P.tm }}>
                   {wardrobePalette.map((p, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
                       <span style={{ width: 8, height: 8, background: p.c, border: `1px solid ${P.bg3}` }}/>
@@ -2239,7 +2290,7 @@ function Atelier() {
           )}
 
           {tab === "rules" && (
-            <div style={{ animation: "fadeIn 0.5s ease", flex: 1, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, minHeight: 0 }}>
+            <div style={{ animation: "fadeIn 0.5s ease", flex: 1, display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1fr 1fr 1fr", gap: 16, minHeight: 0 }}>
               {/* Approved */}
               <Reveal>
                 <div style={{
@@ -2329,7 +2380,7 @@ function Atelier() {
                     The foreman receives the same <em>camera</em>, the same <em>lens</em>, the same <em>light</em>, and the same <em>respect</em> as the chairman.
                   </div>
                   <div style={{
-                    display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10,
+                    display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "1fr 1fr", gap: 10,
                     padding: "14px 0", borderTop: `1px solid rgba(26,23,21,0.15)`,
                     borderBottom: `1px solid rgba(26,23,21,0.15)`, position: "relative"
                   }}>
@@ -2499,7 +2550,7 @@ function Schedule() {
 
         {/* Details grid */}
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1,
+          display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: 1,
           background: P.bg3, marginTop: 40
         }}>
           {phases.map((p, i) => (
@@ -2549,7 +2600,7 @@ function Rollout() {
         </h2>
 
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32
+          display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "1fr" : "repeat(3, 1fr)", gap: 32
         }}>
           {[
             ["Reels & Stories", "Instagram-first. Vertical. 9:16. Captioned. Drops on Thursdays at 19:00 Cairo.", ["@biography.eg", "280k reach target"]],
@@ -2628,7 +2679,7 @@ function Team() {
         </h2>
 
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1,
+          display: "grid", gridTemplateColumns: window.innerWidth < 768 ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: 1,
           background: P.bg3
         }}>
           {[
