@@ -2909,6 +2909,61 @@ function App() {
     }
   }, [active]);
 
+  const { mobile } = useResponsive();
+
+  // Mobile: Long single-page layout
+  if (mobile) {
+    return (
+      <div data-scroll-container style={{
+        background: "#0a0908",
+        color: P.ch,
+        width: "100vw",
+        minHeight: "100vh",
+        overflowY: "auto",
+        overflowX: "hidden",
+        scrollBehavior: "smooth",
+        display: "flex",
+        flexDirection: "column"
+      }}>
+        <TopBar />
+        <SideNav active={active} onGo={go} open={menuOpen} setOpen={setMenuOpen} audioOn={audioOn} toggleAudio={toggleAudio} />
+
+        {/* Mobile: Long page content - all sections stacked */}
+        <div id="cover" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
+          <Cover />
+        </div>
+        <div id="insight" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
+          <Insight />
+        </div>
+        <div id="overview" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
+          <Overview />
+        </div>
+        <div id="concept" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
+          <Concept />
+        </div>
+        <div id="episodes" style={{ background: "#2A2421", padding: "40px 20px", minHeight: "auto" }}>
+          <Episodes />
+        </div>
+        <div id="craft" style={{ background: "#EBE4DB", padding: "40px 20px", minHeight: "auto" }}>
+          <Craft />
+        </div>
+        <div id="atelier" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
+          <Atelier />
+        </div>
+        <div id="schedule" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
+          <Schedule />
+        </div>
+        <div id="rollout" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
+          <Rollout />
+        </div>
+        <div id="close" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
+          <Close />
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop: Slide-based layout with SlideFrame
   return (
     <div data-scroll-container style={{
       background: P.bg,
