@@ -3278,10 +3278,13 @@ function App() {
     }
   }, [active]);
 
-  const { mobile } = useResponsive();
+  // Direct mobile check - no hook
+  const isMobile = window.innerWidth < 768;
+  console.log(`📱 Mobile: ${isMobile}, Window width: ${window.innerWidth}px`);
 
   // Mobile: Long single-page layout
-  if (mobile) {
+  if (isMobile) {
+    console.log("✅ Rendering MOBILE layout");
     return (
       <div data-scroll-container style={{
         background: "#0a0908",
@@ -3333,6 +3336,7 @@ function App() {
   }
 
   // Desktop: Slide-based layout with SlideFrame
+  console.log("✅ Rendering DESKTOP layout");
   return (
     <div data-scroll-container style={{
       background: P.bg,
