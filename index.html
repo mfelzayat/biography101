@@ -184,7 +184,7 @@
     body { overflow: auto; }
     [data-slide-frame] { height: auto; width: 100%; overflow: visible; min-height: 100vh; }
     [data-scroll-container] { overflow-y: auto; height: auto; }
-    .slide-content { padding: 24px 16px !important; }
+    .slide-content { padding: 32px 20px !important; }
     /* Adjust image heights for mobile */
     [data-slide-frame] img { max-height: 400px; }
     /* Disable touch hover effects on mobile */
@@ -271,6 +271,11 @@
     [data-scroll-container] {
       scrollbar-gutter: stable;
     }
+
+    /* Improve readability on mobile */
+    body { line-height: 1.6; }
+    p { line-height: 1.7; margin-bottom: 16px; }
+    h1, h2, h3, h4, h5, h6 { line-height: 1.3; margin-bottom: 12px; }
   }
 </style>
 

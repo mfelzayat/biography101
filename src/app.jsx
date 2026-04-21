@@ -170,7 +170,7 @@ function SlideFrame({ children, bg = "#F5F0EB", id }) {
         overflow: "visible",
         scrollSnapAlign: "start",
         flexShrink: 0,
-        padding: "24px 16px"
+        padding: "32px 20px"
       }}>
         {children}
       </div>
@@ -730,7 +730,7 @@ function Cover() {
           <div style={{ maxWidth: "70%" }}>
             <div style={{ overflow: "hidden", marginBottom: 8 }}>
               <div style={{
-                fontFamily: sf, fontSize: rfs(28, 20), fontStyle: "italic", fontWeight: 300,
+                fontFamily: sf, fontSize: rfs(28, 24), fontStyle: "italic", fontWeight: 300,
                 color: P.mv,
                 transform: inView ? "translateY(0)" : "translateY(100%)",
                 opacity: inView ? 1 : 0,
@@ -1105,7 +1105,7 @@ function Concept() {
 
               {/* Lede — pull-quote */}
               <div style={{
-                fontFamily: sf, fontSize: rfs(28, 20), fontWeight: 300, lineHeight: 1.25,
+                fontFamily: sf, fontSize: rfs(28, 24), fontWeight: 300, lineHeight: 1.25,
                 color: P.ch, letterSpacing: "-0.005em", marginBottom: 22
               }}>
                 A nine-part documentary <em>portrait</em> of the people who design, build, sell and inhabit Biography — released as the public face of the company's rebrand from Attal Properties.
@@ -1123,7 +1123,7 @@ function Concept() {
 
               {/* Body */}
               <div style={{
-                fontFamily: ss, fontSize: rfs(16, 14), lineHeight: 1.65, color: P.ts,
+                fontFamily: ss, fontSize: rfs(16, 15), lineHeight: 1.65, color: P.ts,
                 marginBottom: 22, columnCount: window.innerWidth < 768 ? 1 : 2, columnGap: 32
               }}>
                 <p style={{ marginBottom: 12 }}>
@@ -1359,7 +1359,7 @@ function Episodes() {
           <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
             {/* Section title — moved here to fill the top-right empty space */}
             <h2 style={{
-              fontFamily: sf, fontSize: rfs(84, 48),
+              fontFamily: sf, fontSize: rfs(84, 56),
               fontWeight: 200, lineHeight: 0.95, letterSpacing: "-0.03em",
               margin: 0, marginBottom: 40
             }}>
@@ -1375,7 +1375,7 @@ function Episodes() {
             }}>EPISODE {EPS[active].n} / 9</div>
 
             <h3 style={{
-              fontFamily: sf, fontSize: rfs(56, 32), fontWeight: 300, margin: 0,
+              fontFamily: sf, fontSize: rfs(56, 40), fontWeight: 300, margin: 0,
               lineHeight: 1, letterSpacing: "-0.02em", marginBottom: 6
             }}>{EPS[active].t}</h3>
 
@@ -1767,7 +1767,7 @@ function SoundTab() {
         }}>REFERENCE SCORE</div>
 
         <h3 style={{
-          fontFamily: sf, fontSize: rfs(56, 32), fontWeight: 200,
+          fontFamily: sf, fontSize: rfs(56, 40), fontWeight: 200,
           lineHeight: 1, margin: 0, marginBottom: 40
         }}>
           Solo piano.<br/>
@@ -2208,7 +2208,7 @@ function Atelier() {
                           {/* episode label over image */}
                           <div style={{ position: "absolute", top: 14, left: 14, display: "flex", alignItems: "baseline", gap: 10 }}>
                             <span style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.3em", color: P.mv, background: "rgba(26,23,21,0.55)", padding: "4px 8px", backdropFilter: "blur(4px)" }}>EP {s.ep}</span>
-                            <span style={{ fontFamily: sf, fontSize: rfs(28, 20), fontStyle: "italic", color: P.bg, textShadow: "0 2px 14px rgba(0,0,0,0.55)" }}>{s.t}</span>
+                            <span style={{ fontFamily: sf, fontSize: rfs(28, 24), fontStyle: "italic", color: P.bg, textShadow: "0 2px 14px rgba(0,0,0,0.55)" }}>{s.t}</span>
                           </div>
                         </div>
                       ) : (
@@ -2226,7 +2226,7 @@ function Atelier() {
                           </div>
                           <div style={{ position: "absolute", top: 14, left: 14, display: "flex", alignItems: "baseline", gap: 10 }}>
                             <span style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.3em", color: P.mv, background: "rgba(26,23,21,0.45)", padding: "4px 8px" }}>EP {s.ep}</span>
-                            <span style={{ fontFamily: sf, fontSize: rfs(28, 20), fontStyle: "italic", color: P.bg }}>{s.t}</span>
+                            <span style={{ fontFamily: sf, fontSize: rfs(28, 24), fontStyle: "italic", color: P.bg }}>{s.t}</span>
                           </div>
                           <div style={{ position: "absolute", top: 14, right: 14, fontFamily: mn, fontSize: 8.5, letterSpacing: "0.26em", color: P.mv, padding: "3px 8px", background: "rgba(26,23,21,0.45)" }}>
                             IMAGE · TBD
