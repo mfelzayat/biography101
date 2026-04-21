@@ -136,7 +136,7 @@ const EPS = [
   { n: "109", t: "The Place, Speaking", s: "Composite Finale", r: "All Voices", q: "And then the place began to tell.", d: "No single subject. No single question. Episode 109 layers all eight voices over place imagery — until the series resolves.", c: "#5A524B", img: window.__resources.r_ep9_place_png }
 ];
 
-// ==================== SLIDE FRAME (16:9 desktop, responsive mobile) ====================
+// ==================== SLIDE FRAME (16:9 desktop, vertical flow mobile) ====================
 function SlideFrame({ children, bg = "#F5F0EB", id }) {
   const [scale, setScale] = useState(1);
   const outerRef = useRef(null);
@@ -163,15 +163,35 @@ function SlideFrame({ children, bg = "#F5F0EB", id }) {
     return (
       <div ref={outerRef} data-slide-frame data-section={id} style={{
         position: "relative",
-        width: "100vw",
-        minHeight: "100vh",
+        width: "100%",
+        minHeight: "auto",
         background: bg,
         display: "flex", flexDirection: "column",
         overflow: "visible",
         scrollSnapAlign: "start",
         flexShrink: 0,
-        padding: "32px 20px"
+        padding: "40px 20px",
+        gap: 24,
+        alignItems: "stretch"
       }}>
+        <style>{`
+          [data-slide-frame][data-section="${id}"] > * {
+            width: 100% !important;
+            max-width: 100% !important;
+            display: block !important;
+          }
+          [data-slide-frame][data-section="${id}"] img {
+            width: 100% !important;
+            height: auto !important;
+            max-height: 500px;
+            object-fit: cover;
+          }
+          [data-slide-frame][data-section="${id}"] > div[style*="grid"] {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 20px !important;
+          }
+        `}</style>
         {children}
       </div>
     );

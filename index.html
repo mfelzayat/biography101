@@ -182,11 +182,40 @@
   /* Mobile optimizations */
   @media (max-width: 767px) {
     body { overflow: auto; }
-    [data-slide-frame] { height: auto; width: 100%; overflow: visible; min-height: 100vh; }
+    [data-slide-frame] {
+      height: auto !important;
+      width: 100% !important;
+      overflow: visible !important;
+      min-height: auto;
+      display: flex !important;
+      flex-direction: column !important;
+      padding: 40px 20px !important;
+      gap: 24px !important;
+    }
     [data-scroll-container] { overflow-y: auto; height: auto; }
     .slide-content { padding: 32px 20px !important; }
+
+    /* Force all grids to stack vertically */
+    [style*="display: grid"],
+    [style*="gridTemplateColumns"] {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 20px !important;
+    }
+
+    /* Full width content on mobile */
+    [data-slide-frame] > div {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
     /* Adjust image heights for mobile */
-    [data-slide-frame] img { max-height: 400px; }
+    [data-slide-frame] img {
+      max-height: 500px !important;
+      width: 100% !important;
+      height: auto !important;
+      object-fit: cover;
+    }
     /* Disable touch hover effects on mobile */
     @media (hover: none) {
       [role="button"]:hover, button:hover, [style*="cursor: pointer"]:hover {
