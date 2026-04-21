@@ -530,6 +530,40 @@ const EPS = [
   { n: "109", t: "The Place, Speaking", s: "Composite Finale", r: "All Voices", q: "And then the place began to tell.", d: "No single subject. No single question. Episode 109 layers all eight voices over place imagery — until the series resolves.", c: "#5A524B", img: window.__resources.r_ep9_place_png }
 ];
 
+// ==================== MOBILE SLIDE FRAME (scales 1920×1080 to viewport width) ====================
+function MobileSlideFrame({ children, bg = "#E5D3D9", id }) {
+  const getState = () => {
+    const scale = window.innerWidth / 1920;
+    return { scale, height: Math.ceil(scale * 1080) };
+  };
+  const [state, setState] = useState(getState);
+  useEffect(() => {
+    const fit = () => setState(getState());
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, []);
+  return (
+    <div data-section={id} style={{
+      position: "relative",
+      width: "100vw",
+      height: state.height,
+      background: bg,
+      overflow: "hidden",
+      flexShrink: 0
+    }}>
+      <div style={{
+        width: 1920, height: 1080,
+        transform: `scale(${state.scale})`,
+        transformOrigin: "top left",
+        position: "absolute",
+        top: 0, left: 0
+      }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 // ==================== SLIDE FRAME (16:9, scales to viewport) ====================
 function SlideFrame({ children, bg = "#E5D3D9", id }) {
   const [scale, setScale] = useState(1);
@@ -3300,37 +3334,17 @@ function App() {
         <TopBar />
         <SideNav active={active} onGo={go} open={menuOpen} setOpen={setMenuOpen} audioOn={audioOn} toggleAudio={toggleAudio} />
 
-        {/* Mobile: Long page content - all sections stacked */}
-        <div id="cover" data-section="cover" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
-          <Cover />
-        </div>
-        <div id="insight" data-section="insight" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
-          <Insight />
-        </div>
-        <div id="overview" data-section="overview" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
-          <Overview />
-        </div>
-        <div id="concept" data-section="concept" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
-          <Concept />
-        </div>
-        <div id="episodes" data-section="episodes" style={{ background: "#2A2421", padding: "40px 20px", minHeight: "auto" }}>
-          <Episodes />
-        </div>
-        <div id="craft" data-section="craft" style={{ background: "#D4BFC6", padding: "40px 20px", minHeight: "auto" }}>
-          <Craft />
-        </div>
-        <div id="atelier" data-section="atelier" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
-          <Atelier />
-        </div>
-        <div id="schedule" data-section="schedule" style={{ background: P.bg, padding: "40px 20px", minHeight: "auto" }}>
-          <Schedule />
-        </div>
-        <div id="rollout" data-section="rollout" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
-          <Rollout />
-        </div>
-        <div id="close" data-section="close" style={{ background: "#1A1715", padding: "40px 20px", minHeight: "auto" }}>
-          <Close />
-        </div>
+        {/* Mobile: all sections scaled to viewport width via MobileSlideFrame */}
+        <MobileSlideFrame id="cover" bg="#1A1715"><Cover /></MobileSlideFrame>
+        <MobileSlideFrame id="insight" bg={P.bg}><Insight /></MobileSlideFrame>
+        <MobileSlideFrame id="overview" bg="#1A1715"><Overview /></MobileSlideFrame>
+        <MobileSlideFrame id="concept" bg={P.bg}><Concept /></MobileSlideFrame>
+        <MobileSlideFrame id="episodes" bg="#2A2421"><Episodes /></MobileSlideFrame>
+        <MobileSlideFrame id="craft" bg="#D4BFC6"><Craft /></MobileSlideFrame>
+        <MobileSlideFrame id="atelier" bg={P.bg}><Atelier /></MobileSlideFrame>
+        <MobileSlideFrame id="schedule" bg={P.bg}><Schedule /></MobileSlideFrame>
+        <MobileSlideFrame id="rollout" bg="#1A1715"><Rollout /></MobileSlideFrame>
+        <MobileSlideFrame id="close" bg="#1A1715"><Close /></MobileSlideFrame>
       </div>
     );
   }
