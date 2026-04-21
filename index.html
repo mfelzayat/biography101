@@ -181,40 +181,69 @@
 
   /* Mobile optimizations */
   @media (max-width: 767px) {
-    body { overflow: auto; }
+    body {
+      overflow: auto !important;
+      height: auto !important;
+    }
+
+    /* Override scroll container */
+    [data-scroll-container] {
+      overflow-y: auto !important;
+      height: auto !important;
+      overflow-x: hidden !important;
+    }
+
+    /* Mobile slide frame - completely vertical */
     [data-slide-frame] {
       height: auto !important;
-      width: 100% !important;
+      width: 100vw !important;
+      min-height: auto !important;
       overflow: visible !important;
-      min-height: auto;
-      display: flex !important;
-      flex-direction: column !important;
+      display: block !important;
       padding: 40px 20px !important;
-      gap: 24px !important;
+      margin: 0 !important;
+      transform: none !important;
+      position: relative !important;
+      box-sizing: border-box !important;
     }
-    [data-scroll-container] { overflow-y: auto; height: auto; }
-    .slide-content { padding: 32px 20px !important; }
 
-    /* Force all grids to stack vertically */
-    [style*="display: grid"],
-    [style*="gridTemplateColumns"] {
+    /* Remove 1920x1080 container */
+    [data-slide-frame] > div[style*="width: 1920"] {
+      width: 100% !important;
+      height: auto !important;
+      transform: none !important;
+      position: relative !important;
+    }
+
+    /* Force all grids to vertical stack */
+    [style*="gridTemplateColumns"],
+    [style*="display: grid"] {
       display: flex !important;
       flex-direction: column !important;
       gap: 20px !important;
+      width: 100% !important;
     }
 
-    /* Full width content on mobile */
-    [data-slide-frame] > div {
+    /* Full width elements */
+    [data-slide-frame] > * {
       width: 100% !important;
       max-width: 100% !important;
+      display: block !important;
     }
 
-    /* Adjust image heights for mobile */
-    [data-slide-frame] img {
+    /* Images responsive on mobile */
+    img {
+      max-width: 100% !important;
+      height: auto !important;
       max-height: 500px !important;
       width: 100% !important;
-      height: auto !important;
-      object-fit: cover;
+      object-fit: cover !important;
+    }
+
+    /* Fix inner divs */
+    [data-slide-frame] div {
+      width: 100% !important;
+      max-width: 100% !important;
     }
     /* Disable touch hover effects on mobile */
     @media (hover: none) {

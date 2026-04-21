@@ -161,37 +161,18 @@ function SlideFrame({ children, bg = "#F5F0EB", id }) {
 
   if (mobile) {
     return (
-      <div ref={outerRef} data-slide-frame data-section={id} style={{
+      <div ref={outerRef} data-slide-frame data-section={id} data-mobile="true" style={{
         position: "relative",
-        width: "100%",
+        width: "100vw",
         minHeight: "auto",
         background: bg,
-        display: "flex", flexDirection: "column",
+        display: "block",
         overflow: "visible",
         scrollSnapAlign: "start",
         flexShrink: 0,
         padding: "40px 20px",
-        gap: 24,
-        alignItems: "stretch"
+        boxSizing: "border-box"
       }}>
-        <style>{`
-          [data-slide-frame][data-section="${id}"] > * {
-            width: 100% !important;
-            max-width: 100% !important;
-            display: block !important;
-          }
-          [data-slide-frame][data-section="${id}"] img {
-            width: 100% !important;
-            height: auto !important;
-            max-height: 500px;
-            object-fit: cover;
-          }
-          [data-slide-frame][data-section="${id}"] > div[style*="grid"] {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 20px !important;
-          }
-        `}</style>
         {children}
       </div>
     );
