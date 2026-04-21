@@ -96,6 +96,8 @@
   [data-section] { scrollbar-width: none; }
   button { font-family: inherit; }
   img { display: block; max-width: 100%; }
+  /* Lazy load images for better mobile performance */
+  img[loading="lazy"] { content-visibility: auto; }
 
   /* ---- Content animations (added) ---- */
 
@@ -156,6 +158,25 @@
     .slide-content [style*="grid-template-columns"] > * { animation: none !important; }
     [style*="color: rgb(200, 169, 110)"],
     [style*="color: #C8A96E"] { animation: none !important; }
+  }
+
+  /* Mobile-specific animation optimizations */
+  @media (max-width: 767px) {
+    /* Reduce animation duration on mobile for better perceived performance */
+    [style*="animation:"] {
+      animation-duration: calc(var(--duration, 1s) * 0.7) !important;
+    }
+
+    /* Disable Ken Burns effect on mobile */
+    img[alt=""][style*="object-fit: cover"] {
+      animation: none !important;
+      transform: scale(1) !important;
+    }
+
+    /* Reduce staggered tile animations */
+    .slide-content [style*="grid-template-columns"] > * {
+      animation-delay: 0.2s !important;
+    }
   }
 
   /* Mobile optimizations */
@@ -222,6 +243,34 @@
       bottom: 100px;
     }
     #fs-toggle svg { width: 20px; height: 20px; }
+
+    /* Viewport height fixes for mobile browsers with dynamic toolbars */
+    html {
+      height: 100%;
+      height: 100vh;
+      height: 100dvh;
+    }
+    body {
+      height: 100%;
+      height: 100vh;
+      height: 100dvh;
+    }
+
+    /* Disable zoom on input focus */
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+
+    /* Smooth scrolling on mobile */
+    [data-scroll-container] {
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Prevent layout shift from scrollbars */
+    [data-scroll-container] {
+      scrollbar-gutter: stable;
+    }
   }
 </style>
 

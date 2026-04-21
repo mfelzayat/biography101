@@ -81,10 +81,33 @@ function useResponsive() {
       const w = window.innerWidth;
       setBp({ w, mobile: w < 768, tablet: w >= 768 && w < 1024, desktop: w >= 1024 });
     };
-    window.addEventListener('resize', onResize);
+    window.addEventListener('resize', onResize, { passive: true });
     return () => window.removeEventListener('resize', onResize);
   }, []);
   return bp;
+}
+
+function useSwipe(onSwipeLeft, onSwipeRight) {
+  const [touch, setTouch] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const onTouchStart = (e) => {
+      setTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+    };
+    const onTouchEnd = (e) => {
+      const dx = touch.x - e.changedTouches[0].clientX;
+      const dy = touch.y - e.changedTouches[0].clientY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+        if (dx > 0 && onSwipeLeft) onSwipeLeft();
+        else if (dx < 0 && onSwipeRight) onSwipeRight();
+      }
+    };
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchend', onTouchEnd, { passive: true });
+    return () => {
+      document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [touch, onSwipeLeft, onSwipeRight]);
 }
 
 // ==================== DATA ====================
@@ -2856,9 +2879,15 @@ function App() {
       else if (e.key === "Home") { e.preventDefault(); go(SECS[0].id); }
       else if (e.key === "End") { e.preventDefault(); go(SECS[SECS.length-1].id); }
     };
-    window.addEventListener("keydown", onKey);
+    window.addEventListener("keydown", onKey, { passive: false });
     return () => window.removeEventListener("keydown", onKey);
   }, [active]);
+
+  // Swipe navigation on mobile
+  useSwipe(
+    () => { const i = SECS.findIndex(s => s.id === active); if (i < SECS.length - 1) go(SECS[i+1].id); },
+    () => { const i = SECS.findIndex(s => s.id === active); if (i > 0) go(SECS[i-1].id); }
+  );
 
   useEffect(() => {
     const sections = SECS.map(s => document.querySelector(`[data-section="${s.id}"]`)).filter(Boolean);
