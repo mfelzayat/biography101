@@ -468,6 +468,42 @@ function useMouse() {
   return m;
 }
 
+function useResponsive() {
+  const [bp, setBp] = useState({ w: window.innerWidth, mobile: window.innerWidth < 768, tablet: window.innerWidth >= 768 && window.innerWidth < 1024, desktop: window.innerWidth >= 1024 });
+  useEffect(() => {
+    const onResize = () => {
+      const w = window.innerWidth;
+      setBp({ w, mobile: w < 768, tablet: w >= 768 && w < 1024, desktop: w >= 1024 });
+    };
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+  return bp;
+}
+
+function useSwipe(onSwipeLeft, onSwipeRight) {
+  const [touch, setTouch] = useState({ x: 0, y: 0 });
+  useEffect(() => {
+    const onTouchStart = (e) => {
+      setTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+    };
+    const onTouchEnd = (e) => {
+      const dx = touch.x - e.changedTouches[0].clientX;
+      const dy = touch.y - e.changedTouches[0].clientY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+        if (dx > 0 && onSwipeLeft) onSwipeLeft();
+        else if (dx < 0 && onSwipeRight) onSwipeRight();
+      }
+    };
+    document.addEventListener('touchstart', onTouchStart, { passive: true });
+    document.addEventListener('touchend', onTouchEnd, { passive: true });
+    return () => {
+      document.removeEventListener('touchstart', onTouchStart);
+      document.removeEventListener('touchend', onTouchEnd);
+    };
+  }, [touch, onSwipeLeft, onSwipeRight]);
+}
+
 // ==================== DATA ====================
 const SECS = [
   { id: "cover", l: "Prologue", n: "00", bg: "#1A1715" },
