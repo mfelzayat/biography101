@@ -135,6 +135,46 @@
     [style*="color: rgb(200, 169, 110)"],
     [style*="color: #C8A96E"] { animation: none !important; }
   }
+
+  /* ---- Fullscreen toggle ---- */
+  #fs-toggle {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 200;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(168, 139, 150, 0.45);
+    background: rgba(229, 211, 217, 0.82);
+    color: #1A1715;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background .3s ease, border-color .3s ease, transform .3s ease, opacity .3s ease;
+    opacity: 0.75;
+  }
+  #fs-toggle:hover {
+    background: rgba(212, 191, 198, 0.95);
+    border-color: rgba(126, 101, 112, 0.7);
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+  #fs-toggle svg { width: 16px; height: 16px; display: block; }
+  #fs-toggle .fs-exit  { display: none; }
+  :fullscreen      #fs-toggle .fs-enter,
+  :-webkit-full-screen #fs-toggle .fs-enter { display: none; }
+  :fullscreen      #fs-toggle .fs-exit,
+  :-webkit-full-screen #fs-toggle .fs-exit  { display: block; }
+  /* Hide the main scroll container's scrollbar only when in fullscreen. */
+  :fullscreen [data-scroll-container]::-webkit-scrollbar,
+  :-webkit-full-screen [data-scroll-container]::-webkit-scrollbar { width: 0; height: 0; }
+  :fullscreen [data-scroll-container],
+  :-webkit-full-screen [data-scroll-container] { scrollbar-width: none; }
 </style>
 
 
@@ -3075,6 +3115,42 @@ window.App = App;
 </script>
 <script type="text/babel">
   ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+<!-- Fullscreen toggle. Lives outside #root so React never re-renders it. -->
+<button id="fs-toggle" type="button" aria-label="Toggle fullscreen" title="Fullscreen (F)">
+  <svg class="fs-enter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square">
+    <path d="M4 9V4h5"/><path d="M20 9V4h-5"/><path d="M4 15v5h5"/><path d="M20 15v5h-5"/>
+  </svg>
+  <svg class="fs-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square">
+    <path d="M9 4v5H4"/><path d="M15 4v5h5"/><path d="M9 20v-5H4"/><path d="M15 20v-5h5"/>
+  </svg>
+</button>
+<script>
+  (function () {
+    var btn = document.getElementById('fs-toggle');
+    if (!btn) return;
+    function inFullscreen() {
+      return !!(document.fullscreenElement || document.webkitFullscreenElement);
+    }
+    function toggle() {
+      if (inFullscreen()) {
+        (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      } else {
+        var el = document.documentElement;
+        (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+      }
+    }
+    btn.addEventListener('click', toggle);
+    // Keyboard shortcut: press "f" to toggle (ignore when typing).
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'f' && e.key !== 'F') return;
+      var t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      e.preventDefault();
+      toggle();
+    });
+  })();
 </script>
 </body>
 </html>
