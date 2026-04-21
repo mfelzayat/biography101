@@ -270,7 +270,8 @@ function SideNav({ active, onGo, open, setOpen, audioOn, toggleAudio }) {
         pointerEvents: open ? "auto" : "none",
         transition: "opacity 0.5s cubic-bezier(.2,.7,.2,1)",
         display: "flex", flexDirection: "column", justifyContent: "center",
-        padding: "80px 64px"
+        padding: window.innerWidth < 768 ? "60px 20px" : "80px 64px",
+        overflowY: "auto"
       }}>
         <div style={{ maxWidth: 1100, margin: "0 auto", width: "100%" }}>
           <div style={{
@@ -321,11 +322,11 @@ function SideNav({ active, onGo, open, setOpen, audioOn, toggleAudio }) {
         </div>
       </div>
 
-      {/* Dash-tower — right edge, vertical */}
+      {/* Dash-tower — right edge, vertical (hidden on mobile) */}
       <nav aria-label="Slide navigation" style={{
         position: "fixed", right: 20, top: "50%",
         transform: "translateY(-50%)", zIndex: 95,
-        display: "flex", flexDirection: "column",
+        display: window.innerWidth < 768 ? "none" : "flex", flexDirection: "column",
         alignItems: "flex-end", gap: 10,
         padding: "14px 10px 14px 22px",
         pointerEvents: "auto"
@@ -462,7 +463,7 @@ function ControlDock({ active, onGo, menuOpen, setMenuOpen, audioOn, toggleAudio
       disabled={disabled}
       title={title}
       style={{
-        width: 32, height: 32, borderRadius: "50%",
+        width: window.innerWidth < 768 ? 40 : 32, height: window.innerWidth < 768 ? 40 : 32, borderRadius: "50%",
         background: "transparent", border: "none",
         color: glassText, cursor: disabled ? "not-allowed" : "pointer",
         opacity: disabled ? 0.3 : 0.85,
@@ -479,12 +480,12 @@ function ControlDock({ active, onGo, menuOpen, setMenuOpen, audioOn, toggleAudio
 
   return (
     <div style={{
-      position: "fixed", bottom: 16, right: 16, zIndex: 95,
+      position: "fixed", bottom: window.innerWidth < 768 ? 20 : 16, right: window.innerWidth < 768 ? 20 : 16, zIndex: 95,
       display: "flex", alignItems: "center", gap: 4,
       background: isDark ? "rgba(245,240,235,0.14)" : "rgba(26,23,21,0.12)",
       border: `1px solid ${isDark ? "rgba(245,240,235,0.35)" : "rgba(26,23,21,0.22)"}`,
       borderRadius: 100,
-      padding: "5px 6px 5px 12px",
+      padding: window.innerWidth < 768 ? "8px 8px 8px 14px" : "5px 6px 5px 12px",
       backdropFilter: "blur(28px) saturate(180%)",
       WebkitBackdropFilter: "blur(28px) saturate(180%)",
       boxShadow: `0 1px 0 ${isDark ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.5)'} inset, 0 -1px 0 ${isDark ? 'rgba(0,0,0,0.25)' : 'rgba(0,0,0,0.08)'} inset, 0 12px 36px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.12)`,
