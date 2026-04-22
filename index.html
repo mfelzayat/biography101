@@ -1064,7 +1064,76 @@ function Cover() {
   const [ref, inView] = useInView(0.05);
   const mouse = useMouse();
   const [loaded, setLoaded] = useState(false);
+  const { mobile } = useResponsive();
   useEffect(() => { setTimeout(() => setLoaded(true), 200); }, []);
+
+  if (mobile) {
+    return (
+      <section data-screen-label="00 Cover" style={{
+        position: "relative", width: "100%", minHeight: "100svh",
+        background: P.ch, overflow: "hidden",
+        padding: "100px 20px 40px",
+        display: "flex", flexDirection: "column", justifyContent: "space-between"
+      }}>
+        {/* Full-bleed background image */}
+        <div style={{ position: "absolute", inset: 0 }}>
+          <img src={window.__resources.r_cover_desk_png} alt="" style={{
+            width: "100%", height: "100%", objectFit: "cover",
+            opacity: loaded ? 0.55 : 0,
+            transition: "opacity 2s ease"
+          }}/>
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "linear-gradient(to bottom, rgba(26,23,21,0.5) 0%, transparent 40%, rgba(26,23,21,0.9) 100%)"
+          }}/>
+        </div>
+
+        {/* Content */}
+        <div style={{ position: "relative", color: P.bg }}>
+          <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.3em", opacity: 0.7, marginBottom: 24 }}>
+            A STRIKE MEDIA PRODUCTION<br/>
+            <span style={{ opacity: 0.5 }}>FOR BIOGRAPHY · 2026</span>
+          </div>
+
+          <div style={{ fontFamily: sf, fontSize: 68, fontWeight: 300, lineHeight: 0.9, letterSpacing: "-0.04em", marginBottom: 12 }}>
+            <span style={{ opacity: 0.4, fontWeight: 200 }}>_</span>Biography
+          </div>
+          <div style={{ fontFamily: sf, fontSize: 52, fontWeight: 200, lineHeight: 1, color: P.mv, marginBottom: 16 }}>
+            101
+          </div>
+          <div style={{ fontFamily: mn, fontSize: 12, letterSpacing: "0.3em", opacity: 0.7 }}>
+            Creative Treatment<br/>
+            <span style={{ opacity: 0.6 }}>& Production Blueprint</span>
+          </div>
+        </div>
+
+        {/* Stats 2×2 grid */}
+        <div style={{ position: "relative", color: P.bg }}>
+          <div style={{
+            display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16,
+            borderTop: "1px solid rgba(245,240,235,0.15)", paddingTop: 24, marginTop: 32
+          }}>
+            {[
+              ["FORMAT", "9 Episodes", "60–120 sec"],
+              ["CAMERA", "ARRI Alexa Mini LF", "Cooke S4 + FX3"],
+              ["PRIMARY", "9:16 Vertical", "Reels · Shorts"],
+              ["FIRST AIR", "Week 3", "Post launch"]
+            ].map(([l, v, s], i) => (
+              <div key={i}>
+                <div style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.2em", opacity: 0.5, marginBottom: 4 }}>{l}</div>
+                <div style={{ fontFamily: sf, fontSize: 16, fontWeight: 500 }}>{v}</div>
+                <div style={{ fontFamily: mn, fontSize: 11, opacity: 0.6, marginTop: 2 }}>{s}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 28, display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.26em", opacity: 0.5 }}>Powered by</div>
+            <img src={window.__resources.r_strike_media_png} alt="Strike Media" style={{ height: 40, width: "auto", opacity: 0.8 }}/>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section ref={ref} data-screen-label="00 Cover" style={{
@@ -1242,6 +1311,56 @@ function Insight() {
   const [ref, inView] = useInView(0.2);
   const sRef = useRef(null);
   const prog = useScrollProgress(sRef);
+  const { mobile } = useResponsive();
+
+  if (mobile) {
+    return (
+      <section data-screen-label="01 Insight" style={{
+        position: "relative", width: "100%"
+      }}>
+        {/* Chapter label */}
+        <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.3em", opacity: 0.6, marginBottom: 8, color: P.mvd }}>CH. 01</div>
+        <div style={{ height: 1, background: P.bg3, margin: "0 0 32px" }}/>
+
+        <h2 style={{
+          fontFamily: sf, fontSize: 40, fontWeight: 300, lineHeight: 1.05,
+          letterSpacing: "-0.02em", color: P.ch, margin: 0, marginBottom: 36
+        }}>
+          The market does not lack property.<br/>
+          <em style={{ color: P.mvd }}>It lacks meaning.</em>
+        </h2>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 32, marginBottom: 32 }}>
+          <div>
+            <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.3em", color: P.mvd, marginBottom: 12 }}>01 / THE GAP</div>
+            <p style={{ fontFamily: ss, fontSize: 16, lineHeight: 1.7, color: P.ts, margin: 0 }}>
+              In Egypt's real estate landscape, every developer markets square metres and renders. Biography is an <em style={{ color: P.ch }}>80-year inheritance</em> with a new name — and a story the market has never heard.
+              <br/><br/>
+              <span style={{ color: P.ch, fontWeight: 500 }}>This series does not advertise. It reveals.</span>
+            </p>
+          </div>
+          <div>
+            <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.3em", color: P.mvd, marginBottom: 12 }}>02 / THE MOVE</div>
+            <p style={{ fontFamily: ss, fontSize: 16, lineHeight: 1.7, color: P.ts, margin: 0 }}>
+              The documentary format is not decoration. It is strategy. When a brand lets cameras inside its process, it signals something advertising cannot: <em style={{ color: P.ch }}>confidence.</em>
+              <br/><br/>
+              <span style={{ color: P.ch, fontWeight: 500 }}>Attention becomes trust. Trust becomes territory.</span>
+            </p>
+          </div>
+        </div>
+
+        {/* Arabic block */}
+        <div style={{ paddingTop: 20, borderTop: `1px solid ${P.bg3}` }}>
+          <div dir="rtl" style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 17, color: P.ch, lineHeight: 1.7, fontWeight: 500, marginBottom: 8 }}>
+            الانتباه يصير ثقة. والثقة تصير استثمار.
+          </div>
+          <div dir="rtl" style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, color: P.ts, lineHeight: 1.7 }}>
+            الوثائقيات ليست معلومات عامة - هي استراتيجية تواصل متكاملة. حين تفتح الشركات أبوابها للكاميرات لتعرض التفاصيل، تقول ما لا يقوله الإعلان المباشر.
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section ref={sRef} data-screen-label="01 Insight" style={{
@@ -1318,6 +1437,71 @@ function Overview() {
   const sRef = useRef(null);
   const prog = useScrollProgress(sRef);
   const [ref, inView] = useInView(0.15);
+  const { mobile } = useResponsive();
+
+  if (mobile) {
+    return (
+      <section data-screen-label="02 Company" style={{
+        position: "relative", width: "100%", color: P.bg
+      }}>
+        <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.3em", opacity: 0.6, marginBottom: 8, color: P.mv }}>CH. 02</div>
+        <div style={{ height: 1, background: "rgba(245,240,235,0.2)", margin: "0 0 32px" }}/>
+
+        <h2 style={{
+          fontFamily: sf, fontSize: 48, fontWeight: 200, lineHeight: 0.95,
+          letterSpacing: "-0.03em", margin: 0, marginBottom: 28
+        }}>
+          The<br/>
+          <em style={{ color: P.mv }}>Places that tell.</em>
+        </h2>
+
+        <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.3em", color: P.mv, marginBottom: 12 }}>THE REBRAND</div>
+        <p style={{ fontFamily: ss, fontSize: 16, lineHeight: 1.65, color: "rgba(245,240,235,0.85)", marginBottom: 20 }}>
+          Rebranded from <em>Attal Properties</em> in March 2026, Biography is a subsidiary of El Attal Holding — an 80-year-old Egyptian family group founded in 1948.
+        </p>
+
+        {/* El Attal logo + parent info */}
+        <div style={{
+          display: "flex", alignItems: "center", gap: 14,
+          paddingTop: 18, paddingBottom: 18, borderTop: "1px solid rgba(245,240,235,0.12)", marginBottom: 24
+        }}>
+          <img src={window.__resources.r_logo_attal_mono_png} alt="El Attal Holding" style={{ height: 40, width: "auto", opacity: 0.85 }}/>
+          <div>
+            <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.22em", color: P.mv, marginBottom: 3 }}>PARENT GROUP</div>
+            <div style={{ fontFamily: sf, fontSize: 16, color: "rgba(245,240,235,0.8)" }}>El Attal Holding <span style={{ fontFamily: mn, fontSize: 11, color: "rgba(245,240,235,0.5)" }}>· SINCE 1948</span></div>
+          </div>
+        </div>
+
+        {/* Leadership list */}
+        <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.3em", color: P.mv, marginBottom: 12 }}>LEADERSHIP</div>
+        <div style={{ fontFamily: sf, fontSize: 16, lineHeight: 1.9, color: "rgba(245,240,235,0.9)", marginBottom: 28 }}>
+          Ahmed El Attal <span style={{ fontFamily: mn, fontSize: 11, color: P.mv, letterSpacing: "0.1em" }}>— CHAIRMAN</span><br/>
+          Mohamed El Attal <span style={{ fontFamily: mn, fontSize: 11, color: P.mv, letterSpacing: "0.1em" }}>— VICE CHAIRMAN</span><br/>
+          Sherif Saleh <span style={{ fontFamily: mn, fontSize: 11, color: P.mv, letterSpacing: "0.1em" }}>— CEO</span><br/>
+          Menna El Attal <span style={{ fontFamily: mn, fontSize: 11, color: P.mv, letterSpacing: "0.1em" }}>— CMO</span>
+        </div>
+
+        {/* 4 development cards 2×2 grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+          {[
+            { n: "Parklane", s: "Delivered · Inhabited", logo: window.__resources.r_logo_parklane_mono_png },
+            { n: "West Leaves", s: "Under development", logo: window.__resources.r_logo_westleaves_mono_png },
+            { n: "Bayside", s: "Coastal · Planned", logo: window.__resources.r_logo_bayside_mono_png },
+            { n: "The 101", s: "Active site", logo: window.__resources.r_logo_the101_mono_png }
+          ].map((d, i) => (
+            <div key={i} style={{
+              background: P.ch2, padding: 20,
+              display: "flex", flexDirection: "column", alignItems: "center", gap: 8
+            }}>
+              <img src={d.logo} alt={d.n} style={{ height: 36, width: "auto", maxWidth: "100%", objectFit: "contain", opacity: 0.85 }}/>
+              <div style={{ fontFamily: sf, fontSize: 15, fontWeight: 400, textAlign: "center" }}>{d.n}</div>
+              <div style={{ fontFamily: mn, fontSize: 10, color: "rgba(245,240,235,0.45)", letterSpacing: "0.1em", textAlign: "center" }}>{d.s}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section ref={sRef} data-screen-label="02 Company" style={{
@@ -1453,6 +1637,67 @@ function Concept() {
   const sRef = useRef(null);
   const prog = useScrollProgress(sRef);
   const [ref, inView] = useInView(0.1);
+  const { mobile } = useResponsive();
+
+  if (mobile) {
+    return (
+      <section data-screen-label="03 Concept" style={{
+        position: "relative", width: "100%"
+      }}>
+        <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.3em", opacity: 0.6, marginBottom: 8, color: P.mvd }}>CH. 03</div>
+        <div style={{ height: 1, background: P.bg3, margin: "0 0 32px" }}/>
+
+        <h2 style={{
+          fontFamily: sf, fontSize: 40, fontWeight: 300, lineHeight: 1.05,
+          letterSpacing: "-0.02em", color: P.ch, margin: 0, marginBottom: 32
+        }}>
+          Before places can tell,<br/>
+          <em style={{ color: P.mvd, fontWeight: 400 }}>people must speak.</em>
+        </h2>
+
+        <p style={{ fontFamily: ss, fontSize: 16, lineHeight: 1.7, color: P.ts, marginBottom: 24 }}>
+          A nine-part documentary <em>portrait</em> of the people who design, build, sell and inhabit Biography — released as the public face of the company's rebrand from Attal Properties.
+        </p>
+
+        <div dir="rtl" style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, color: P.ch, lineHeight: 1.7, marginBottom: 28, paddingRight: 12, borderRight: `2px solid ${P.mvd}` }}>
+          تسع حلقات وثائقية عن الأشخاص الذين يصممون هذه الأماكن ويبنونها ويبيعونها ويرعون مجتمعاتها.
+        </div>
+
+        {/* Format strip 2×2 */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: P.bg3, marginBottom: 32 }}>
+          {[
+            ["EPISODES", "09"],
+            ["RUNTIME", "90 — 120s"],
+            ["FORMAT", "9:16 · Vertical"],
+            ["CADENCE", "One per drop"]
+          ].map(([l, v], i) => (
+            <div key={i} style={{ background: P.bg2, padding: "16px 14px" }}>
+              <div style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.26em", color: P.mvd, marginBottom: 4 }}>{l}</div>
+              <div style={{ fontFamily: sf, fontSize: 18, color: P.ch, fontWeight: 400 }}>{v}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Concept pillars */}
+        <div>
+          {[
+            ["Tone", "Observational, intimate, unhurried. We do not narrate. The subject speaks, the camera observes, the place breathes."],
+            ["Structure", "One person. One question. One truth. Each episode opens on the question, then earns the answer across 90–120 seconds."],
+            ["Visual Language", "9:16 vertical-first. Shallow depth. Natural light dominant. Every frame composed to hold attention on a phone."],
+            ["Audio Philosophy", "Solo piano motif. No stock music. Silence is a tool. The score enters only where earned."]
+          ].map(([t, d], i) => (
+            <div key={i} style={{ padding: "20px 0", borderTop: "1px solid rgba(26,23,21,0.15)" }}>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 8 }}>
+                <span style={{ fontFamily: mn, fontSize: 11, color: P.mvd, letterSpacing: "0.22em" }}>0{i + 1}</span>
+                <h3 style={{ fontFamily: sf, fontSize: 22, fontWeight: 400, margin: 0, color: P.ch, fontStyle: "italic" }}>{t}</h3>
+              </div>
+              <p style={{ fontFamily: ss, fontSize: 15, lineHeight: 1.6, color: P.ts, margin: 0 }}>{d}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section ref={sRef} data-screen-label="03 Concept" style={{
@@ -3334,17 +3579,37 @@ function App() {
         <TopBar />
         <SideNav active={active} onGo={go} open={menuOpen} setOpen={setMenuOpen} audioOn={audioOn} toggleAudio={toggleAudio} />
 
-        {/* Mobile: all sections scaled to viewport width via MobileSlideFrame */}
-        <MobileSlideFrame id="cover" bg="#1A1715"><Cover /></MobileSlideFrame>
-        <MobileSlideFrame id="insight" bg={P.bg}><Insight /></MobileSlideFrame>
-        <MobileSlideFrame id="overview" bg="#1A1715"><Overview /></MobileSlideFrame>
-        <MobileSlideFrame id="concept" bg={P.bg}><Concept /></MobileSlideFrame>
-        <MobileSlideFrame id="episodes" bg="#2A2421"><Episodes /></MobileSlideFrame>
-        <MobileSlideFrame id="craft" bg="#D4BFC6"><Craft /></MobileSlideFrame>
-        <MobileSlideFrame id="atelier" bg={P.bg}><Atelier /></MobileSlideFrame>
-        <MobileSlideFrame id="schedule" bg={P.bg}><Schedule /></MobileSlideFrame>
-        <MobileSlideFrame id="rollout" bg="#1A1715"><Rollout /></MobileSlideFrame>
-        <MobileSlideFrame id="close" bg="#1A1715"><Close /></MobileSlideFrame>
+        {/* Mobile: purpose-built mobile layouts rendered as plain divs */}
+        <div id="cover" data-section="cover" style={{ background: "#1A1715", padding: "0" }}>
+          <Cover />
+        </div>
+        <div id="insight" data-section="insight" style={{ background: P.bg, padding: "60px 20px 40px" }}>
+          <Insight />
+        </div>
+        <div id="overview" data-section="overview" style={{ background: "#1A1715", padding: "60px 20px 40px" }}>
+          <Overview />
+        </div>
+        <div id="concept" data-section="concept" style={{ background: P.bg, padding: "60px 20px 40px" }}>
+          <Concept />
+        </div>
+        <div id="episodes" data-section="episodes" style={{ background: "#2A2421", padding: "60px 20px 40px" }}>
+          <Episodes />
+        </div>
+        <div id="craft" data-section="craft" style={{ background: P.bg2, padding: "60px 20px 40px" }}>
+          <Craft />
+        </div>
+        <div id="atelier" data-section="atelier" style={{ background: P.bg, padding: "60px 20px 40px" }}>
+          <Atelier />
+        </div>
+        <div id="schedule" data-section="schedule" style={{ background: P.bg, padding: "60px 20px 40px" }}>
+          <Schedule />
+        </div>
+        <div id="rollout" data-section="rollout" style={{ background: "#1A1715", padding: "60px 20px 40px" }}>
+          <Rollout />
+        </div>
+        <div id="close" data-section="close" style={{ background: "#1A1715", padding: "0" }}>
+          <Close />
+        </div>
       </div>
     );
   }
