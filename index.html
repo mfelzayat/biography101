@@ -1902,8 +1902,207 @@ function Episodes() {
   const [active, setActive] = useState(0);
   const [ref, inView] = useInView(0.1);
   const { mobile } = useResponsive();
+  const [txStart, setTxStart] = useState(null);
 
   if (mobile) {
+    const prev = () => setActive(i => Math.max(0, i - 1));
+    const next = () => setActive(i => Math.min(EPS.length - 1, i + 1));
+    const onTS  = (e) => setTxStart(e.touches[0].clientX);
+    const onTE  = (e) => {
+      if (txStart === null) return;
+      const dx = txStart - e.changedTouches[0].clientX;
+      if (Math.abs(dx) > 36) { dx > 0 ? next() : prev(); }
+      setTxStart(null);
+    };
+    const ep = EPS[active];
+    const fallbackImgs = [
+      window.__resources.r_site_dawn_png, window.__resources.r_site_dawn_png,
+      window.__resources.r_craft_png, window.__resources.r_concept_hero_png,
+      window.__resources.r_craft_png, window.__resources.r_production_png,
+      window.__resources.r_concept_hero_png, window.__resources.r_site_dawn_png,
+      window.__resources.r_production_png
+    ];
+
+    return (
+      <section data-screen-label="04 Episodes" style={{ position: "relative", width: "100%" }}>
+
+        {/* ── Header ── */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+          <span style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.3em", color: P.mv, opacity: 0.85 }}>CH. 04</span>
+          <span style={{ flex: 1, height: 1, background: "rgba(245,240,235,0.15)" }}/>
+          <span style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.22em", color: "rgba(245,240,235,0.35)" }}>NINE TRUTHS</span>
+        </div>
+
+        {/* ── BIG phone — episode slider inside ── */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, marginBottom: 24 }}>
+
+          {/* Prev arrow */}
+          <button onClick={prev} disabled={active === 0} style={{
+            width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
+            background: active === 0 ? "transparent" : "rgba(245,240,235,0.1)",
+            border: `1px solid ${active === 0 ? "rgba(245,240,235,0.08)" : "rgba(245,240,235,0.25)"}`,
+            color: active === 0 ? "rgba(245,240,235,0.2)" : "rgba(245,240,235,0.85)",
+            cursor: active === 0 ? "default" : "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 16, transition: "all 0.3s", padding: 0
+          }}>‹</button>
+
+          {/* Phone frame */}
+          <div style={{
+            flex: 1, maxWidth: 240,
+            aspectRatio: "9/19.5",
+            background: "#0a0a0a", borderRadius: 36, padding: 8,
+            boxShadow: "0 32px 80px rgba(0,0,0,0.85), 0 0 0 1px rgba(212,191,198,0.15), inset 0 0 0 1px rgba(255,255,255,0.04)",
+            position: "relative"
+          }}>
+            {/* Side buttons */}
+            <div style={{ position: "absolute", left: -3, top: "28%", width: 3, height: 32, background: "#1a1a1a", borderRadius: "2px 0 0 2px" }}/>
+            <div style={{ position: "absolute", left: -3, top: "38%", width: 3, height: 48, background: "#1a1a1a", borderRadius: "2px 0 0 2px" }}/>
+            <div style={{ position: "absolute", left: -3, top: "49%", width: 3, height: 48, background: "#1a1a1a", borderRadius: "2px 0 0 2px" }}/>
+            <div style={{ position: "absolute", right: -3, top: "33%", width: 3, height: 64, background: "#1a1a1a", borderRadius: "0 2px 2px 0" }}/>
+
+            {/* Screen */}
+            <div
+              style={{
+                position: "relative", height: "100%", borderRadius: 28,
+                overflow: "hidden", background: "#111",
+                cursor: "grab"
+              }}
+              onTouchStart={onTS}
+              onTouchEnd={onTE}
+            >
+              {/* Notch */}
+              <div style={{
+                position: "absolute", top: 10, left: "50%", transform: "translateX(-50%)",
+                width: 72, height: 22, background: "#0a0a0a", borderRadius: 20, zIndex: 10
+              }}/>
+
+              {/* Episode image — full screen */}
+              <img key={active} src={ep.img || fallbackImgs[active]} alt={ep.t} style={{
+                position: "absolute", inset: 0, width: "100%", height: "100%",
+                objectFit: "cover", animation: "fadeIn 0.4s ease"
+              }}/>
+
+              {/* Gradient layers */}
+              <div style={{
+                position: "absolute", inset: 0,
+                background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 30%, transparent 45%, rgba(0,0,0,0.95) 100%)"
+              }}/>
+
+              {/* Episode progress dots — top (like Stories) */}
+              <div style={{
+                position: "absolute", top: 42, left: 10, right: 10,
+                display: "flex", gap: 3, zIndex: 8
+              }}>
+                {EPS.map((_, i) => (
+                  <div key={i} style={{
+                    flex: 1, height: 2, borderRadius: 2,
+                    background: i === active ? "#fff" : "rgba(255,255,255,0.28)",
+                    transition: "background 0.3s"
+                  }}/>
+                ))}
+              </div>
+
+              {/* Top label */}
+              <div style={{
+                position: "absolute", top: 54, left: 12, right: 12, zIndex: 8
+              }}>
+                <div style={{ fontFamily: mn, fontSize: 9, letterSpacing: "0.22em", color: ep.c, marginBottom: 2 }}>
+                  EP.{ep.n}
+                </div>
+                <div style={{ fontFamily: sf, fontSize: 16, fontWeight: 400, color: "#fff", lineHeight: 1.1 }}>
+                  {ep.t}
+                </div>
+              </div>
+
+              {/* Right-side engagement icons */}
+              <div style={{
+                position: "absolute", right: 10, bottom: 110,
+                display: "flex", flexDirection: "column", gap: 16, zIndex: 8
+              }}>
+                {[["♡","Like"], ["○","Comment"], ["◇","Save"], ["↗","Share"]].map(([icon, label], i) => (
+                  <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+                    <div style={{
+                      width: 36, height: 36, borderRadius: "50%",
+                      background: "rgba(255,255,255,0.18)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 16, color: "#fff", backdropFilter: "blur(8px)"
+                    }}>{icon}</div>
+                    <span style={{ fontFamily: mn, fontSize: 7, color: "rgba(255,255,255,0.6)", letterSpacing: "0.05em" }}>{label}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Bottom caption */}
+              <div style={{
+                position: "absolute", left: 12, right: 54, bottom: 30, zIndex: 8
+              }}>
+                <div style={{
+                  fontFamily: mn, fontSize: 9, letterSpacing: "0.15em",
+                  color: "rgba(255,255,255,0.6)", marginBottom: 5
+                }}>@{ep.s.replace(/\s/g,'').toLowerCase()} · {ep.r}</div>
+                <div style={{
+                  fontFamily: sf, fontSize: 13, fontStyle: "italic",
+                  color: "#fff", lineHeight: 1.35
+                }}>"{ep.q.length > 60 ? ep.q.slice(0,58) + '…' : ep.q}"</div>
+              </div>
+
+              {/* Home bar */}
+              <div style={{
+                position: "absolute", bottom: 6, left: "28%", right: "28%",
+                height: 3, background: "rgba(255,255,255,0.55)", borderRadius: 2, zIndex: 8
+              }}/>
+
+              {/* Invisible tap zones L/R for prev/next */}
+              <div onClick={prev} style={{ position: "absolute", left: 0, top: "15%", bottom: "15%", width: "30%", zIndex: 9, cursor: "pointer" }}/>
+              <div onClick={next} style={{ position: "absolute", right: 0, top: "15%", bottom: "15%", width: "30%", zIndex: 9, cursor: "pointer" }}/>
+            </div>
+          </div>
+
+          {/* Next arrow */}
+          <button onClick={next} disabled={active === EPS.length - 1} style={{
+            width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
+            background: active === EPS.length - 1 ? "transparent" : "rgba(245,240,235,0.1)",
+            border: `1px solid ${active === EPS.length - 1 ? "rgba(245,240,235,0.08)" : "rgba(245,240,235,0.25)"}`,
+            color: active === EPS.length - 1 ? "rgba(245,240,235,0.2)" : "rgba(245,240,235,0.85)",
+            cursor: active === EPS.length - 1 ? "default" : "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 16, transition: "all 0.3s", padding: 0
+          }}>›</button>
+        </div>
+
+        {/* ── Episode counter ── */}
+        <div style={{
+          display: "flex", justifyContent: "center", alignItems: "center",
+          gap: 8, marginBottom: 24
+        }}>
+          <span style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.3em", color: ep.c }}>
+            {String(active + 1).padStart(2,"0")} / {String(EPS.length).padStart(2,"0")}
+          </span>
+        </div>
+
+        {/* ── Episode detail ── */}
+        <div style={{ paddingTop: 20, borderTop: `1px solid rgba(245,240,235,0.12)` }}>
+          <h3 style={{
+            fontFamily: sf, fontSize: 32, fontWeight: 300, margin: "0 0 6px",
+            lineHeight: 1, letterSpacing: "-0.02em", color: P.bg
+          }}>{ep.t}</h3>
+          <div style={{ fontFamily: sf, fontSize: 14, fontStyle: "italic", color: P.mv, marginBottom: 18 }}>
+            {ep.s} <span style={{ opacity: 0.4 }}>·</span> {ep.r}
+          </div>
+          <div style={{
+            fontFamily: sf, fontSize: 17, fontStyle: "italic", lineHeight: 1.45,
+            color: P.bg, marginBottom: 14,
+            paddingLeft: 14, borderLeft: `2px solid ${ep.c}`
+          }}>"{ep.q}"</div>
+          <p style={{
+            fontFamily: ss, fontSize: 15, lineHeight: 1.65,
+            color: "rgba(245,240,235,0.72)", margin: 0
+          }}>{ep.d}</p>
+        </div>
+      </section>
+    );
+  }
     return (
       <section data-screen-label="04 Episodes" style={{ position: "relative", width: "100%" }}>
 
