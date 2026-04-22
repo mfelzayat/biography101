@@ -858,7 +858,7 @@ function MobileBottomNav({ active, onMenuOpen, audioOn, toggleAudio }) {
     }}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.26em", color: P.mv, marginBottom: 2, opacity: 0.85 }}>
-          {cur.n} / {String(SECS.length - 1).padStart(2, "0")}
+          {String(curIdx + 1).padStart(2, "0")} / {String(SECS.length).padStart(2, "0")} · CH. {cur.n}
         </div>
         <div style={{
           fontFamily: sf, fontSize: 16, color: "rgba(245,240,235,0.92)",
@@ -999,19 +999,27 @@ function ControlDock({ active, onGo, menuOpen, setMenuOpen, audioOn, toggleAudio
 }
 
 function TopBar({ scrollY }) {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   return (
     <header style={{
-      position: "fixed", top: 16, left: 24, right: 24, zIndex: 70,
+      position: "fixed", top: isMobile ? 12 : 16, left: isMobile ? 16 : 24, right: isMobile ? 16 : 24, zIndex: 70,
       display: "flex", justifyContent: "space-between",
       alignItems: "center", pointerEvents: "none",
       color: "rgba(255,255,255,0.6)"
     }}>
-      <div style={{ fontFamily: sf, fontSize: 19, fontWeight: 500, letterSpacing: "-0.01em" }}>
+      <div style={{ fontFamily: sf, fontSize: isMobile ? 15 : 19, fontWeight: 500, letterSpacing: "-0.01em" }}>
         <span style={{ opacity: 0.5 }}>_</span>Biography
       </div>
-      <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.22em", opacity: 0.7 }}>
-        EP. 101 &nbsp;·&nbsp; CREATIVE TREATMENT &nbsp;·&nbsp; 2026
-      </div>
+      {!isMobile && (
+        <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.22em", opacity: 0.7 }}>
+          EP. 101 &nbsp;·&nbsp; CREATIVE TREATMENT &nbsp;·&nbsp; 2026
+        </div>
+      )}
+      {isMobile && (
+        <div style={{ fontFamily: mn, fontSize: 9, letterSpacing: "0.22em", opacity: 0.55 }}>
+          EP. 101 · 2026
+        </div>
+      )}
     </header>
   );
 }
@@ -1092,12 +1100,13 @@ function Cover() {
         <div style={{ position: "absolute", inset: 0 }}>
           <img src={window.__resources.r_cover_desk_png} alt="" style={{
             width: "100%", height: "100%", objectFit: "cover",
-            opacity: loaded ? 0.55 : 0,
+            objectPosition: "center 35%",
+            opacity: loaded ? 0.7 : 0,
             transition: "opacity 2s ease"
           }}/>
           <div style={{
             position: "absolute", inset: 0,
-            background: "linear-gradient(to bottom, rgba(26,23,21,0.5) 0%, transparent 40%, rgba(26,23,21,0.9) 100%)"
+            background: "linear-gradient(to bottom, rgba(26,23,21,0.45) 0%, rgba(26,23,21,0.15) 30%, rgba(26,23,21,0.25) 60%, rgba(26,23,21,0.92) 100%)"
           }}/>
         </div>
 
@@ -4278,12 +4287,20 @@ function App() {
 
   useEffect(() => {
     const sections = SECS.map(s => document.querySelector(`[data-section="${s.id}"]`)).filter(Boolean);
-    const root = document.querySelector("[data-scroll-container]");
+    // On mobile the scroll container has height:auto (CSS override) so it contains
+    // every section — using it as the IntersectionObserver root makes every section
+    // permanently "intersecting" and the last one wins. Use the viewport instead.
+    const isMobileNow = window.innerWidth < 1200;
+    const root = isMobileNow ? null : document.querySelector("[data-scroll-container]");
+    const ratios = {};
     const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) setActive(e.target.dataset.section);
+      entries.forEach(e => { ratios[e.target.dataset.section] = e.intersectionRatio; });
+      let bestId = null, bestRatio = 0;
+      Object.entries(ratios).forEach(([id, r]) => {
+        if (r > bestRatio) { bestRatio = r; bestId = id; }
       });
-    }, { root, threshold: 0.4 });
+      if (bestId && bestRatio > 0.1) setActive(bestId);
+    }, { root, threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] });
     sections.forEach(s => obs.observe(s));
     return () => obs.disconnect();
   }, []);
