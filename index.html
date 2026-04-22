@@ -642,6 +642,7 @@ function Ar({ children, size = 17, color, align = "right", italic = false, style
 
 // ==================== NAV ====================
 function SideNav({ active, onGo, open, setOpen, audioOn, toggleAudio }) {
+  const { mobile } = useResponsive();
   const curIdx = SECS.findIndex(s => s.id === active);
   const cur = SECS[curIdx] || SECS[0];
   // Proper luminance check: parse hex, compute perceived brightness
@@ -715,8 +716,8 @@ function SideNav({ active, onGo, open, setOpen, audioOn, toggleAudio }) {
         </div>
       </div>
 
-      {/* Dash-tower — right edge, vertical */}
-      <nav aria-label="Slide navigation" style={{
+      {/* Dash-tower — right edge, vertical — desktop only */}
+      {!mobile && <nav aria-label="Slide navigation" style={{
         position: "fixed", right: 20, top: "50%",
         transform: "translateY(-50%)", zIndex: 95,
         display: "flex", flexDirection: "column",
@@ -833,8 +834,58 @@ function SideNav({ active, onGo, open, setOpen, audioOn, toggleAudio }) {
             </svg>
           </button>
         </div>
-      </nav>
+      </nav>}
     </>
+  );
+}
+
+// ==================== MOBILE BOTTOM NAV ====================
+function MobileBottomNav({ active, onMenuOpen, audioOn, toggleAudio }) {
+  const curIdx = SECS.findIndex(s => s.id === active);
+  const cur = SECS[curIdx] || SECS[0];
+  const btnStyle = {
+    width: 44, height: 44, borderRadius: "50%",
+    background: "rgba(245,240,235,0.08)",
+    border: "1px solid rgba(245,240,235,0.14)",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    cursor: "pointer", padding: 0, flexShrink: 0
+  };
+  return (
+    <div style={{
+      position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 95,
+      background: "rgba(12,9,8,0.93)",
+      backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
+      borderTop: "1px solid rgba(245,240,235,0.1)",
+      display: "flex", alignItems: "center", justifyContent: "space-between",
+      padding: "10px 20px",
+      paddingBottom: "calc(10px + env(safe-area-inset-bottom, 0px))"
+    }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.26em", color: P.mv, marginBottom: 2, opacity: 0.85 }}>
+          {cur.n} / {String(SECS.length - 1).padStart(2, "0")}
+        </div>
+        <div style={{
+          fontFamily: sf, fontSize: 16, color: "rgba(245,240,235,0.92)",
+          lineHeight: 1.1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"
+        }}>
+          {cur.l}
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 8, alignItems: "center", marginLeft: 16 }}>
+        <button onClick={toggleAudio} style={btnStyle} title={audioOn ? "Mute score" : "Play score"}>
+          <span style={{
+            width: 7, height: 7, borderRadius: "50%", display: "block",
+            background: audioOn ? P.mv : "rgba(245,240,235,0.35)",
+            animation: audioOn ? "pulse 1.4s ease-in-out infinite" : "none"
+          }}/>
+        </button>
+        <button onClick={onMenuOpen} style={{ ...btnStyle, color: "rgba(245,240,235,0.9)" }} title="Open index">
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+            <path d="M1 1h14M1 6h14M1 11h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -1094,7 +1145,7 @@ function Cover() {
           </div>
           <div style={{ marginTop: 28, display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.26em", opacity: 0.5 }}>Powered by</div>
-            <img src={window.__resources.r_strike_media_png} alt="Strike Media" style={{ height: 40, width: "auto", opacity: 0.8 }}/>
+            <img src={window.__resources.r_strike_media_png} alt="Strike Media" style={{ height: 24, maxWidth: 100, width: "auto", opacity: 0.8 }}/>
           </div>
         </div>
       </section>
@@ -1880,6 +1931,66 @@ function Episodes() {
               <div style={{ fontFamily: sf, fontSize: 14, fontWeight: 500, lineHeight: 1.2 }}>{e.t}</div>
             </button>
           ))}
+        </div>
+
+        {/* Phone mockup — compact, centered, episode-aware */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 28 }}>
+          <div style={{
+            position: "relative", width: 160, aspectRatio: "9/19.5",
+            background: "#000", borderRadius: 28, padding: 5,
+            boxShadow: "0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,191,198,0.12)",
+            transition: "all 0.6s cubic-bezier(.2,.7,.2,1)"
+          }}>
+            <div style={{
+              position: "relative", height: "100%", borderRadius: 23, overflow: "hidden",
+              background: `linear-gradient(135deg, ${EPS[active].c}22, ${EPS[active].c}55), #111`
+            }}>
+              <div style={{
+                position: "absolute", top: 7, left: "50%", transform: "translateX(-50%)",
+                width: 52, height: 14, background: "#000", borderRadius: 10, zIndex: 5
+              }}/>
+              <img key={active} src={
+                EPS[active].img || [
+                  window.__resources.r_site_dawn_png, window.__resources.r_site_dawn_png, window.__resources.r_craft_png,
+                  window.__resources.r_concept_hero_png, window.__resources.r_craft_png, window.__resources.r_production_png,
+                  window.__resources.r_concept_hero_png, window.__resources.r_site_dawn_png, window.__resources.r_production_png
+                ][active]
+              } alt="" style={{
+                position: "absolute", inset: 0, width: "100%", height: "100%",
+                objectFit: "cover", opacity: 0.9, animation: "fadeIn 0.5s ease"
+              }}/>
+              <div style={{
+                position: "absolute", inset: 0,
+                background: "linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 45%)"
+              }}/>
+              {/* Right-side social icons */}
+              <div style={{
+                position: "absolute", right: 8, bottom: 48,
+                display: "flex", flexDirection: "column", gap: 10
+              }}>
+                {["♡", "○", "◇"].map((icon, i) => (
+                  <div key={i} style={{
+                    width: 22, height: 22, borderRadius: "50%",
+                    background: "rgba(255,255,255,0.18)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 11, color: "#fff", backdropFilter: "blur(6px)"
+                  }}>{icon}</div>
+                ))}
+              </div>
+              <div style={{ position: "absolute", left: 9, right: 34, bottom: 20 }}>
+                <div style={{ fontFamily: mn, fontSize: 7, letterSpacing: "0.18em", color: EPS[active].c, marginBottom: 2 }}>
+                  EP.{EPS[active].n} · {EPS[active].t.toUpperCase()}
+                </div>
+                <div style={{ fontFamily: sf, fontSize: 10, fontStyle: "italic", color: "#fff", lineHeight: 1.25 }}>
+                  "{EPS[active].q.slice(0, 40)}…"
+                </div>
+              </div>
+              <div style={{
+                position: "absolute", bottom: 3, left: "28%", right: "28%",
+                height: 2, background: "rgba(255,255,255,0.55)", borderRadius: 2
+              }}/>
+            </div>
+          </div>
         </div>
 
         {/* Selected episode detail */}
@@ -3927,7 +4038,7 @@ function Close() {
           {/* Strike Media logo */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
             <div style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.3em", color: "rgba(245,240,235,0.5)" }}>Powered By</div>
-            <img src={window.__resources.r_strike_logo_white_png} alt="Strike Media" style={{ height: 36, opacity: 0.9 }}/>
+            <img src={window.__resources.r_strike_logo_white_png} alt="Strike Media" style={{ height: 24, maxWidth: 100, width: "auto", opacity: 0.9 }}/>
           </div>
         </div>
       </section>
@@ -4069,7 +4180,7 @@ function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, [active]);
 
-  // Swipe navigation on mobile
+  // Swipe navigation (horizontal only — does not conflict with vertical page scroll)
   useSwipe(
     () => { const i = SECS.findIndex(s => s.id === active); if (i < SECS.length - 1) go(SECS[i+1].id); },
     () => { const i = SECS.findIndex(s => s.id === active); if (i > 0) go(SECS[i-1].id); }
@@ -4082,7 +4193,7 @@ function App() {
       entries.forEach(e => {
         if (e.isIntersecting) setActive(e.target.dataset.section);
       });
-    }, { root, threshold: 0.5 });
+    }, { root, threshold: 0.4 });
     sections.forEach(s => obs.observe(s));
     return () => obs.disconnect();
   }, []);
@@ -4096,11 +4207,9 @@ function App() {
 
   // Direct mobile check - no hook
   const isMobile = window.innerWidth < 1200;
-  console.log(`📱 Mobile: ${isMobile}, Window width: ${window.innerWidth}px`);
 
   // Mobile: Long single-page layout
   if (isMobile) {
-    console.log("✅ Rendering MOBILE layout");
     return (
       <div data-scroll-container style={{
         background: "#0a0908",
@@ -4114,7 +4223,10 @@ function App() {
         flexDirection: "column"
       }}>
         <TopBar />
+        {/* Fullscreen index menu overlay only — dash-tower suppressed on mobile */}
         <SideNav active={active} onGo={go} open={menuOpen} setOpen={setMenuOpen} audioOn={audioOn} toggleAudio={toggleAudio} />
+        {/* Bottom nav bar replaces the side dash-tower */}
+        <MobileBottomNav active={active} onMenuOpen={() => setMenuOpen(true)} audioOn={audioOn} toggleAudio={toggleAudio} />
 
         {/* Mobile: purpose-built mobile layouts rendered as plain divs */}
         <div id="cover" data-section="cover" style={{ background: "#1A1715", padding: "0" }}>
@@ -4144,7 +4256,8 @@ function App() {
         <div id="rollout" data-section="rollout" style={{ background: "#1A1715", padding: "60px 20px 40px" }}>
           <Rollout />
         </div>
-        <div id="close" data-section="close" style={{ background: "#1A1715", padding: "0" }}>
+        {/* Bottom padding equals bottom nav bar height + safe area */}
+        <div id="close" data-section="close" style={{ background: "#1A1715", padding: "0", paddingBottom: "80px" }}>
           <Close />
         </div>
       </div>
