@@ -1906,109 +1906,121 @@ function Episodes() {
   if (mobile) {
     return (
       <section data-screen-label="04 Episodes" style={{ position: "relative", width: "100%" }}>
-        <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.3em", opacity: 0.6, marginBottom: 8, color: P.mv }}>CH. 04</div>
-        <div style={{ height: 1, background: "rgba(245,240,235,0.2)", margin: "0 0 32px" }}/>
 
-        <h2 style={{
-          fontFamily: sf, fontSize: 44, fontWeight: 200, lineHeight: 0.95,
-          letterSpacing: "-0.03em", margin: 0, marginBottom: 32, color: P.bg
-        }}>
-          Nine episodes.<br/>
-          <em style={{ color: P.mv }}>Nine truths.</em>
-        </h2>
+        {/* ── ABOVE-THE-FOLD: mockup + 3×3 grid together in one view ── */}
+        <div style={{ display: "flex", flexDirection: "column", minHeight: "calc(100svh - 180px)", justifyContent: "space-between" }}>
 
-        {/* 3×3 episode grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 6, marginBottom: 28 }}>
-          {EPS.map((e, i) => (
-            <button key={i} onClick={() => setActive(i)} style={{
-              background: active === i ? e.c : "rgba(245,240,235,0.05)",
-              border: `1px solid ${active === i ? e.c : "rgba(245,240,235,0.1)"}`,
-              color: active === i ? P.ch : P.bg,
-              padding: "12px 8px", cursor: "pointer",
-              textAlign: "left", transition: "all 0.3s"
-            }}>
-              <div style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.1em", opacity: active === i ? 0.7 : 0.5, marginBottom: 4 }}>{e.n}</div>
-              <div style={{ fontFamily: sf, fontSize: 14, fontWeight: 500, lineHeight: 1.2 }}>{e.t}</div>
-            </button>
-          ))}
-        </div>
-
-        {/* Phone mockup — compact, centered, episode-aware */}
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: 28 }}>
-          <div style={{
-            position: "relative", width: 160, aspectRatio: "9/19.5",
-            background: "#000", borderRadius: 28, padding: 5,
-            boxShadow: "0 24px 64px rgba(0,0,0,0.7), 0 0 0 1px rgba(212,191,198,0.12)",
-            transition: "all 0.6s cubic-bezier(.2,.7,.2,1)"
-          }}>
-            <div style={{
-              position: "relative", height: "100%", borderRadius: 23, overflow: "hidden",
-              background: `linear-gradient(135deg, ${EPS[active].c}22, ${EPS[active].c}55), #111`
-            }}>
-              <div style={{
-                position: "absolute", top: 7, left: "50%", transform: "translateX(-50%)",
-                width: 52, height: 14, background: "#000", borderRadius: 10, zIndex: 5
-              }}/>
-              <img key={active} src={
-                EPS[active].img || [
-                  window.__resources.r_site_dawn_png, window.__resources.r_site_dawn_png, window.__resources.r_craft_png,
-                  window.__resources.r_concept_hero_png, window.__resources.r_craft_png, window.__resources.r_production_png,
-                  window.__resources.r_concept_hero_png, window.__resources.r_site_dawn_png, window.__resources.r_production_png
-                ][active]
-              } alt="" style={{
-                position: "absolute", inset: 0, width: "100%", height: "100%",
-                objectFit: "cover", opacity: 0.9, animation: "fadeIn 0.5s ease"
-              }}/>
-              <div style={{
-                position: "absolute", inset: 0,
-                background: "linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 45%)"
-              }}/>
-              {/* Right-side social icons */}
-              <div style={{
-                position: "absolute", right: 8, bottom: 48,
-                display: "flex", flexDirection: "column", gap: 10
-              }}>
-                {["♡", "○", "◇"].map((icon, i) => (
-                  <div key={i} style={{
-                    width: 22, height: 22, borderRadius: "50%",
-                    background: "rgba(255,255,255,0.18)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 11, color: "#fff", backdropFilter: "blur(6px)"
-                  }}>{icon}</div>
-                ))}
-              </div>
-              <div style={{ position: "absolute", left: 9, right: 34, bottom: 20 }}>
-                <div style={{ fontFamily: mn, fontSize: 7, letterSpacing: "0.18em", color: EPS[active].c, marginBottom: 2 }}>
-                  EP.{EPS[active].n} · {EPS[active].t.toUpperCase()}
-                </div>
-                <div style={{ fontFamily: sf, fontSize: 10, fontStyle: "italic", color: "#fff", lineHeight: 1.25 }}>
-                  "{EPS[active].q.slice(0, 40)}…"
-                </div>
-              </div>
-              <div style={{
-                position: "absolute", bottom: 3, left: "28%", right: "28%",
-                height: 2, background: "rgba(255,255,255,0.55)", borderRadius: 2
-              }}/>
+          {/* Header row */}
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+              <span style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.3em", opacity: 0.6, color: P.mv }}>CH. 04</span>
+              <span style={{ flex: 1, height: 1, background: "rgba(245,240,235,0.15)" }}/>
+              <span style={{ fontFamily: mn, fontSize: 10, letterSpacing: "0.22em", color: "rgba(245,240,235,0.4)" }}>NINE TRUTHS</span>
             </div>
+            <h2 style={{
+              fontFamily: sf, fontSize: 32, fontWeight: 200, lineHeight: 1.0,
+              letterSpacing: "-0.03em", margin: 0, marginBottom: 16, color: P.bg
+            }}>
+              Nine episodes. <em style={{ color: P.mv }}>Nine truths.</em>
+            </h2>
+          </div>
+
+          {/* Phone mockup — above the grid */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
+            <div style={{
+              position: "relative", width: 96, aspectRatio: "9/19.5",
+              background: "#000", borderRadius: 22, padding: 4,
+              boxShadow: "0 16px 48px rgba(0,0,0,0.75), 0 0 0 1px rgba(212,191,198,0.1)",
+              transition: "all 0.5s cubic-bezier(.2,.7,.2,1)"
+            }}>
+              <div style={{
+                position: "relative", height: "100%", borderRadius: 18, overflow: "hidden",
+                background: `linear-gradient(135deg, ${EPS[active].c}22, ${EPS[active].c}55), #111`
+              }}>
+                {/* Notch */}
+                <div style={{
+                  position: "absolute", top: 5, left: "50%", transform: "translateX(-50%)",
+                  width: 36, height: 10, background: "#000", borderRadius: 8, zIndex: 5
+                }}/>
+                <img key={active} src={
+                  EPS[active].img || [
+                    window.__resources.r_site_dawn_png, window.__resources.r_site_dawn_png, window.__resources.r_craft_png,
+                    window.__resources.r_concept_hero_png, window.__resources.r_craft_png, window.__resources.r_production_png,
+                    window.__resources.r_concept_hero_png, window.__resources.r_site_dawn_png, window.__resources.r_production_png
+                  ][active]
+                } alt="" style={{
+                  position: "absolute", inset: 0, width: "100%", height: "100%",
+                  objectFit: "cover", opacity: 0.9, animation: "fadeIn 0.4s ease"
+                }}/>
+                <div style={{
+                  position: "absolute", inset: 0,
+                  background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 50%)"
+                }}/>
+                {/* Right icons */}
+                <div style={{ position: "absolute", right: 5, bottom: 36, display: "flex", flexDirection: "column", gap: 7 }}>
+                  {["♡", "○", "◇"].map((icon, i) => (
+                    <div key={i} style={{
+                      width: 16, height: 16, borderRadius: "50%",
+                      background: "rgba(255,255,255,0.2)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 7, color: "#fff"
+                    }}>{icon}</div>
+                  ))}
+                </div>
+                {/* Bottom label */}
+                <div style={{ position: "absolute", left: 6, right: 24, bottom: 13 }}>
+                  <div style={{ fontFamily: mn, fontSize: 5.5, letterSpacing: "0.15em", color: EPS[active].c, marginBottom: 2 }}>
+                    EP.{EPS[active].n}
+                  </div>
+                  <div style={{ fontFamily: sf, fontSize: 7.5, fontStyle: "italic", color: "#fff", lineHeight: 1.2 }}>
+                    {EPS[active].t}
+                  </div>
+                </div>
+                {/* Home bar */}
+                <div style={{
+                  position: "absolute", bottom: 3, left: "28%", right: "28%",
+                  height: 1.5, background: "rgba(255,255,255,0.5)", borderRadius: 2
+                }}/>
+              </div>
+            </div>
+          </div>
+
+          {/* 3×3 episode grid — below mockup, same viewport */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 5 }}>
+            {EPS.map((e, i) => (
+              <button key={i} onClick={() => setActive(i)} style={{
+                background: active === i ? e.c : "rgba(245,240,235,0.04)",
+                border: `1px solid ${active === i ? e.c : "rgba(245,240,235,0.1)"}`,
+                color: active === i ? P.ch : P.bg,
+                padding: "10px 7px", cursor: "pointer",
+                textAlign: "left", transition: "all 0.3s"
+              }}>
+                <div style={{ fontFamily: mn, fontSize: 9, letterSpacing: "0.1em", opacity: active === i ? 0.8 : 0.45, marginBottom: 3 }}>{e.n}</div>
+                <div style={{ fontFamily: sf, fontSize: 12, fontWeight: 500, lineHeight: 1.15 }}>{e.t}</div>
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Selected episode detail */}
-        <div style={{ padding: "24px 0" }}>
-          <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.3em", color: EPS[active].c, marginBottom: 12 }}>
+        {/* ── BELOW-FOLD: episode detail (scrolls into view) ── */}
+        <div style={{
+          marginTop: 32, paddingTop: 28,
+          borderTop: `1px solid rgba(245,240,235,0.15)`
+        }}>
+          <div style={{ fontFamily: mn, fontSize: 11, letterSpacing: "0.3em", color: EPS[active].c, marginBottom: 10 }}>
             EPISODE {EPS[active].n} / 9
           </div>
           <h3 style={{
-            fontFamily: sf, fontSize: 32, fontWeight: 300, margin: 0,
+            fontFamily: sf, fontSize: 30, fontWeight: 300, margin: 0,
             lineHeight: 1, letterSpacing: "-0.02em", marginBottom: 6, color: P.bg
           }}>{EPS[active].t}</h3>
-          <div style={{ fontFamily: sf, fontSize: 16, fontStyle: "italic", color: P.mv, marginBottom: 20 }}>
+          <div style={{ fontFamily: sf, fontSize: 15, fontStyle: "italic", color: P.mv, marginBottom: 16 }}>
             {EPS[active].s} <span style={{ opacity: 0.5 }}>·</span> {EPS[active].r}
           </div>
           <div style={{
-            fontFamily: sf, fontSize: 18, fontStyle: "italic",
-            lineHeight: 1.4, color: P.bg, marginBottom: 16,
-            paddingLeft: 16, borderLeft: `2px solid ${EPS[active].c}`
+            fontFamily: sf, fontSize: 17, fontStyle: "italic",
+            lineHeight: 1.4, color: P.bg, marginBottom: 14,
+            paddingLeft: 14, borderLeft: `2px solid ${EPS[active].c}`
           }}>
             "{EPS[active].q}"
           </div>
